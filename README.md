@@ -48,7 +48,12 @@ The following playbook generates a guest image and uploads it to OpenStack:
     - name: Generate guest image and upload
       hosts: openstack
       roles:
-        - role: os-image
+        - role: stackhpc.os-image
+          os_image_auth:
+            auth_url:     "{{ lookup('env','OS_AUTH_URL') }}"
+            username:     "{{ lookup('env','OS_USERNAME') }}"
+            password:     "{{ lookup('env','OS_PASSWORD') }}"
+            project_name: "{{ lookup('env','OS_TENANT_NAME') }}"
           os_image_list:
           - name: FedoraCore
             elements:
