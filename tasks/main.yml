@@ -1,0 +1,40 @@
+---
+- name: Ensure download cache dir exists
+  file: 
+    path: "{{ os_image_cache }}"
+    state: directory
+
+- name: Generate per-image cache directories
+  file:
+    path: "{{ os_image_cache }}/{{ item.name }}"
+    state: directory
+  with_items: "{{ os_image_list }}"
+
+- name: Generate diskimage-builder images
+  command: >
+    env
+    {%if os_image_elements is defined %}ELEMENTS_PATH="{{ os_image_elements }}"{% endif %}
+    {%if item.params is defined %}{{ item.params | join( ' ' ) }}{% endif %}
+    disk-image-create
+      {%if item.size is defined %}--image-size {{ item.size }}{% endif %}
+      {{ os_image_common }}
+      {{ item.elements | join( ' ' ) }} -o {{ item.name }}
+  args:
+    chdir: "{{ os_image_cache }}/{{ item.name }}"
+    creates: "{{ os_image_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+  with_items: "{{ os_image_list }}"
+
+- name: Upload cloud tenant images
+  os_image: 
+    auth_type: "{{ os_image_auth_type }}"
+    auth: "{{ os_image_auth }}"
+    name: "{{ item.name }}"
+    state: present
+    is_public: yes
+    container_format: bare
+    disk_format: qcow2
+    filename: "{{ os_image_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+    properties:
+      cpu_arch: x86_64
+  with_items: "{{ os_image_list }}"
+

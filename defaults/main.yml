@@ -1,0 +1,33 @@
+---
+# Path to a directory in which to cache build artefacts.
+os_image_cache: "{{ lookup('env','HOME') }}/disk_images"
+
+# Colon-seprated path to site-specific diskimage-builder elements
+# os_image_elements: "{{ playbook_dir }}/stackhpc-image-elements" 
+os_image_elements:
+
+# Common elements to include in all images
+os_image_common: vm cloud-init enable-serial-console stable-interface-names
+
+# Example image definition:
+# os_image_list:
+#   - name: CentOS7-OFED4
+#     elements:
+#       - centos7
+#       - mlnx-ofed
+#     size: 3GB
+#     params:
+#       - DIB_XXX=yyy
+os_image_list: []
+
+# OpenStack authentication type: passed to the os_image Ansible module
+os_image_auth_type: password
+
+# OpenStack authentication credentials:
+# For exmaple, take OpenStack authentication credentials from the environment
+#os_image_auth:
+#  auth_url:     "{{ lookup('env','OS_AUTH_URL') }}"
+#  username:     "{{ lookup('env','OS_USERNAME') }}"
+#  password:     "{{ lookup('env','OS_PASSWORD') }}"
+#  project_name: "{{ lookup('env','OS_TENANT_NAME') }}"
+os_image_auth:
