@@ -14,26 +14,26 @@ using the `clouds.yaml` format.
 Role Variables
 --------------
 
-`os_image_cache`: a path to a directory in which to cache build artefacts.
+`os_images_cache`: a path to a directory in which to cache build artefacts.
 It defaults to `~/disk_images`
 
-`os_image_auth_type`: OpenStack authentication endpoint and credentials.
+`os_images_auth_type`: OpenStack authentication endpoint and credentials.
 Defaults to `password`.
 
-`os_image_auth`: OpenStack authentication endpoint and credentials.  For example, a dict of the form:
+`os_images_auth`: OpenStack authentication endpoint and credentials.  For example, a dict of the form:
 * `auth_url`: Keystone auth endpoint URL.  Defaults to `OS_AUTH_URL`.
 * `project`: OpenStack tenant/project.  Defaults to `OS_TENANT_NAME`.
 * `username`: OpenStack username.  Defaults to `OS_USERNAME`.
 * `password`: OpenStack password.  Defaults to `OS_PASSWORD`.  
 
-`os_image_list` is a list of YAML dicts, each containing:
+`os_images_list` is a list of YAML dicts, each containing:
 * `name`: the image name to use in OpenStack.
 * `elements`: a list of diskimage-builder elements to incorporate into the image.
 * `params`: (optional) environment variables to define for diskimage-builder parameters.
   These take the form of `KEY=VALUE` strings.
 * `size`: (optional) size to make the image filesystem.
 
-`os_image_common`: A set of elements to include in every image listed.
+`os_images_common`: A set of elements to include in every image listed.
 Defaults to `vm cloud-init enable-serial-console stable-interface-names`.
 
 Dependencies
@@ -49,12 +49,12 @@ The following playbook generates a guest image and uploads it to OpenStack:
       hosts: openstack
       roles:
         - role: stackhpc.os-image
-          os_image_auth:
+          os_images_auth:
             auth_url:     "{{ lookup('env','OS_AUTH_URL') }}"
             username:     "{{ lookup('env','OS_USERNAME') }}"
             password:     "{{ lookup('env','OS_PASSWORD') }}"
             project_name: "{{ lookup('env','OS_TENANT_NAME') }}"
-          os_image_list:
+          os_images_list:
           - name: FedoraCore
             elements:
               - fedora
