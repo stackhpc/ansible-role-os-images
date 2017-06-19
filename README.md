@@ -29,18 +29,29 @@ Defaults to `password`.
 `os_images_list` is a list of YAML dicts, each containing:
 * `name`: the image name to use in OpenStack.
 * `elements`: a list of diskimage-builder elements to incorporate into the image.
-* `params`: (optional) environment variables to define for diskimage-builder parameters.
-  These take the form of `KEY=VALUE` strings.
+* `env`: (optional) environment variables to define for diskimage-builder parameters.
+  This is a dict of the form of `KEY: VALUE`.
 * `size`: (optional) size to make the image filesystem.
 
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `vm cloud-init enable-serial-console stable-interface-names`.
 
+`os_images_dib_version`: Optionally set a version of diskimage-builder to install.
+By default this is not constrained.
+
+`os_images_git_elements`: An optional list of elements to pull from github, deploy
+locally for incorporation into the images.  Supply a list of dicts with the
+following parameters:
+* `repo`: URL to a git repo for cloning (if not already present)
+* `local`: local path for git cloning
+* `ref`: optional git reference (branch, tag, hash) for cloning.  Defaults to `HEAD`
+
+
 Dependencies
 ------------
 
 Example Playbook
-----------------
+- strings---------------
 
 The following playbook generates a guest image and uploads it to OpenStack:
 
@@ -60,9 +71,9 @@ The following playbook generates a guest image and uploads it to OpenStack:
               - fedora
               - selinux-permissive
               - alaska-extras
-            params:
-              - DIB_ALASKA_DELETE_REPO=y
-              - DIB_ALASKA_PKGLIST="pam-python pam-keystone"
+            env:
+              DIB_ALASKA_DELETE_REPO: "y"
+              DIB_ALASKA_PKGLIST: "pam-python pam-keystone"
 
 Author Information
 ------------------

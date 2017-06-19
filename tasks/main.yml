@@ -1,5 +1,5 @@
 ---
-- name: Set a fact to ensure Ansible uses the python interpreter in the virtualenv
+- name: Ensure Ansible uses virtualenv python interpreter
   set_fact:
     ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
 
@@ -14,11 +14,27 @@
     state: directory
   with_items: "{{ os_images_list }}"
 
+- name: Install a suitable version of diskimage-builder
+  pip:
+    name: "{{ item.name }}"
+    version: "{{ item.version or omit }}"
+    state: present
+    virtualenv: "{{ os_images_venv }}"
+  with_items:
+    - name: diskimage-builder
+      version: "{{ os_images_dib_version }}"
+
+- name: Git clone any additional image element repos
+  git: 
+    repo: "{{ item.repo }}"
+    dest: "{{ item.local }}"
+    version: "{{ item.version | default('HEAD') }}"
+  with_items: "{{ os_images_git_elements }}"
+
 - name: Generate diskimage-builder images
   command: >
     env
     {%if os_images_elements is defined %}ELEMENTS_PATH="{{ os_images_elements }}"{% endif %}
-    {%if item.params is defined %}{{ item.params | join( ' ' ) }}{% endif %}
     disk-image-create
       {%if item.size is defined %}--image-size {{ item.size }}{% endif %}
       {{ os_images_common }}
@@ -26,6 +42,7 @@
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+  environment: "{{ item.env|default({}) }}"
   with_items: "{{ os_images_list }}"
 
 - name: Upload cloud tenant images

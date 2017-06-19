@@ -31,3 +31,6 @@ os_images_auth_type: password
 #  password:     "{{ lookup('env','OS_PASSWORD') }}"
 #  project_name: "{{ lookup('env','OS_TENANT_NAME') }}"
 os_images_auth:
+
+# Pin to a specific version of diskimage-builder if required
+os_images_dib_version:
