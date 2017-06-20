@@ -34,7 +34,7 @@
 - name: Generate diskimage-builder images
   command: >
     env
-    {%if os_images_elements is defined %}ELEMENTS_PATH="{{ os_images_elements }}"{% endif %}
+    {%if os_images_elements is defined %}ELEMENTS_PATH="{{ os_images_elements | join(':') }}"{% endif %}
     disk-image-create
       {%if item.size is defined %}--image-size {{ item.size }}{% endif %}
       {{ os_images_common }}

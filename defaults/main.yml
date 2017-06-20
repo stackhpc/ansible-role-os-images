@@ -2,9 +2,9 @@
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 
-# Colon-seprated path to site-specific diskimage-builder elements
-# os_images_elements: "{{ playbook_dir }}/stackhpc-image-elements" 
-os_images_elements:
+# List of paths of site-specific diskimage-builder elements
+# os_images_elements: [ "{{ playbook_dir }}/stackhpc-image-elements" ]
+os_images_elements: []
 
 # Common elements to include in all images
 os_images_common: vm cloud-init enable-serial-console stable-interface-names

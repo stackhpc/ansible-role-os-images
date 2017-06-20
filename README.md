@@ -46,6 +46,7 @@ following parameters:
 * `local`: local path for git cloning
 * `ref`: optional git reference (branch, tag, hash) for cloning.  Defaults to `HEAD`
 
+`os_images_elements`: An optional list of paths for site-specific DIB elements.
 
 Dependencies
 ------------
