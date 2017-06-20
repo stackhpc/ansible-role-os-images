@@ -51,7 +51,7 @@ Dependencies
 ------------
 
 Example Playbook
-- strings---------------
+----------------
 
 The following playbook generates a guest image and uploads it to OpenStack:
 
