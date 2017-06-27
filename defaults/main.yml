@@ -1,4 +1,8 @@
 ---
+# Path to virtualenv in which to install shade, diskimage-builder and their
+# dependencies.
+os_images_venv:
+
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 
@@ -7,7 +11,7 @@ os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 os_images_elements: []
 
 # Common elements to include in all images
-os_images_common: vm cloud-init enable-serial-console stable-interface-names
+os_images_common: cloud-init enable-serial-console stable-interface-names
 
 # Example image definition:
 # os_images_list:
@@ -16,8 +20,8 @@ os_images_common: vm cloud-init enable-serial-console stable-interface-names
 #       - centos7
 #       - mlnx-ofed
 #     size: 3GB
-#     params:
-#       - DIB_XXX=yyy
+#     env:
+#       DIB_XXX: yyy
 os_images_list: []
 
 # OpenStack authentication type: passed to the os_image Ansible module
