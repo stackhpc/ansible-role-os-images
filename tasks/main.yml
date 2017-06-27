@@ -31,18 +31,21 @@
     version: "{{ item.version | default('HEAD') }}"
   with_items: "{{ os_images_git_elements }}"
 
+- name: Set a fact containing the default DIB environment
+  set_fact:
+    os_image_dib_env_default:
+      ELEMENTS_PATH: "{{ os_images_elements | join(':') }}"
+
 - name: Generate diskimage-builder images
   command: >
-    env
-    {%if os_images_elements is defined %}ELEMENTS_PATH="{{ os_images_elements | join(':') }}"{% endif %}
-    disk-image-create
-      {%if item.size is defined %}--image-size {{ item.size }}{% endif %}
+    {{ os_images_venv }}/bin/disk-image-create
+      {% if item.size is defined %}--image-size {{ item.size }}{% endif %}
       {{ os_images_common }}
       {{ item.elements | join( ' ' ) }} -o {{ item.name }}
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
-  environment: "{{ item.env|default({}) }}"
+  environment: "{{ os_image_dib_env_default | combine(item.env | default({})) }}"
   with_items: "{{ os_images_list }}"
 
 - name: Upload cloud tenant kernel for baremetal images
