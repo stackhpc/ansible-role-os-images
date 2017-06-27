@@ -11,7 +11,7 @@ os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 os_images_elements: []
 
 # Common elements to include in all images
-os_images_common: vm cloud-init enable-serial-console stable-interface-names
+os_images_common: cloud-init enable-serial-console stable-interface-names
 
 # Example image definition:
 # os_images_list:
