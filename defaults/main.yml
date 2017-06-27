@@ -21,7 +21,7 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #       - mlnx-ofed
 #     size: 3GB
 #     env:
-#       DIB_XXX=yyy
+#       DIB_XXX: yyy
 os_images_list: []
 
 # OpenStack authentication type: passed to the os_image Ansible module
