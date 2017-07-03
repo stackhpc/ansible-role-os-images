@@ -86,8 +86,7 @@
     container_format: bare
     disk_format: qcow2
     filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.qcow2"
-    properties:
-      cpu_arch: x86_64
+    properties: "{{ os_images_common_properties | combine(item.0.properties | default({})) or omit }}"
     kernel: "{{ item.1.id if 'baremetal' in item.0.elements else omit }}"
     ramdisk: "{{ item.2.id if 'baremetal' in item.0.elements else omit }}"
   with_together:

@@ -20,9 +20,15 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #       - centos7
 #       - mlnx-ofed
 #     size: 3GB
+#     properties:
+#       os_distro: centos
 #     env:
 #       DIB_XXX: yyy
 os_images_list: []
+
+# Common properties to apply to all glance images.
+os_images_common_properties:
+  cpu_arch: x86_64
 
 # OpenStack authentication type: passed to the os_image Ansible module
 os_images_auth_type: password
