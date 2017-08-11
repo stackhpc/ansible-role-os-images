@@ -24,6 +24,7 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #       os_distro: centos
 #     env:
 #       DIB_XXX: yyy
+#     type: qcow2
 os_images_list: []
 
 # Common properties to apply to all glance images.

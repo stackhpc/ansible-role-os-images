@@ -33,6 +33,7 @@ Defaults to `password`.
   This is a dict of the form of `KEY: VALUE`.
 * `size`: (optional) size to make the image filesystem.
 * `properties`: (optional) dict of properties to set on the glance image.
+* `type`: (optional) image type. Default in DIB is qcow2.
 
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `cloud-init enable-serial-console stable-interface-names`.
