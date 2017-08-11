@@ -4,7 +4,7 @@
     ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
 
 - name: Ensure download cache dir exists
-  file: 
+  file:
     path: "{{ os_images_cache }}"
     state: directory
 
@@ -25,7 +25,7 @@
       version: "{{ os_images_dib_version }}"
 
 - name: Git clone any additional image element repos
-  git: 
+  git:
     repo: "{{ item.repo }}"
     dest: "{{ item.local }}"
     version: "{{ item.version | default('HEAD') }}"

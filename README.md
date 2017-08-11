@@ -24,7 +24,7 @@ Defaults to `password`.
 * `auth_url`: Keystone auth endpoint URL.  Defaults to `OS_AUTH_URL`.
 * `project`: OpenStack tenant/project.  Defaults to `OS_TENANT_NAME`.
 * `username`: OpenStack username.  Defaults to `OS_USERNAME`.
-* `password`: OpenStack password.  Defaults to `OS_PASSWORD`.  
+* `password`: OpenStack password.  Defaults to `OS_PASSWORD`.
 
 `os_images_list` is a list of YAML dicts, each containing:
 * `name`: the image name to use in OpenStack.
@@ -32,9 +32,10 @@ Defaults to `password`.
 * `env`: (optional) environment variables to define for diskimage-builder parameters.
   This is a dict of the form of `KEY: VALUE`.
 * `size`: (optional) size to make the image filesystem.
+* `properties`: (optional) dict of properties to set on the glance image.
 
 `os_images_common`: A set of elements to include in every image listed.
-Defaults to `vm cloud-init enable-serial-console stable-interface-names`.
+Defaults to `cloud-init enable-serial-console stable-interface-names`.
 
 `os_images_dib_version`: Optionally set a version of diskimage-builder to install.
 By default this is not constrained.

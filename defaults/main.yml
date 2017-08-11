@@ -44,3 +44,8 @@ os_images_auth:
 
 # Pin to a specific version of diskimage-builder if required
 os_images_dib_version:
+
+# List of git repositories containing site-specific diskimage-builder elements.
+# Each item should be a dict containing 'repo', 'local', and optionally,
+# 'version' items.
+os_images_git_elements: []
