@@ -1,4 +1,19 @@
 ---
+- name: Ensure qemu-img is installed
+  yum:
+    name: qemu-img
+    state: installed
+  # This complicated Jinja expression counts the images with a 'type' of
+  # 'qcow2' or no 'type'.
+  when: >
+    os_images_list |
+    map(attribute='type') |
+    map('default', 'qcow2') |
+    select('equalto', 'qcow2') |
+    list |
+    length > 0
+  become: True
+
 - name: Ensure Ansible uses virtualenv python interpreter
   set_fact:
     ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
