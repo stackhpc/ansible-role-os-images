@@ -60,7 +60,7 @@
       {{ item.elements | join( ' ' ) }} -o {{ item.name }}
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
-    creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+    creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
   environment: "{{ os_image_dib_env_default | combine(item.env | default({})) }}"
   with_items: "{{ os_images_list }}"
 
