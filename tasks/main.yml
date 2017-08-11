@@ -69,6 +69,39 @@
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
   environment: "{{ os_image_dib_env_default | combine(item.env | default({})) }}"
   with_items: "{{ os_images_list }}"
+  failed_when: false
+  register: result
+  # The output of this command can be quite large, and is not very useful as
+  # a JSON blob.
+  no_log: true
+
+- name: Ensure DIB build logs are copied if the image failed to build
+  copy:
+    content: "{{ item.0[item.1] }}"
+    dest: "{{ os_images_cache }}/{{ item.0.item.name }}/{{ item.0.item.name }}.{{ item.1 }}"
+  with_nested:
+    - "{{ result.results }}"
+    - [stdout, stderr]
+  when:
+    - not item.0|skipped
+    - item.0.rc != 0
+    - item.1 in item.0
+  # The output of this command can be quite large, and is not very useful as
+  # a JSON blob.
+  no_log: true
+
+- name: Fail if any images failed to build
+  fail:
+    msg: >
+      Image {{ item.0.name }} failed to build. See
+      {{ item.0.name }}.stdout and {{ item.0.name }}.stderr in
+      {{ os_images_cache }}/{{ item.0.name }}.
+  when: item.1 != 0
+  # Avoid iterating over the results directly as the output can be large, and
+  # adding no_log will suppress the failure message.
+  with_together:
+    - "{{ os_images_list }}"
+    - "{{ result.results | map(attribute='rc') | list }}"
 
 - block:
     - name: Ensure Ansible uses virtualenv python interpreter
