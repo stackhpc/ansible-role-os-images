@@ -14,9 +14,6 @@
     length > 0
   become: True
 
-- name: Ensure Ansible uses virtualenv python interpreter
-  set_fact:
-    ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
 
 - name: Ensure download cache dir exists
   file:
@@ -65,6 +62,10 @@
   with_items: "{{ os_images_list }}"
 
 - block:
+    - name: Ensure Ansible uses virtualenv python interpreter
+      set_fact:
+        ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
+
     - name: Upload cloud tenant kernel for baremetal images
       os_image:
         auth_type: "{{ os_images_auth_type }}"
@@ -110,10 +111,11 @@
         - "{{ os_images_list }}"
         - "{{ kernel_result.results }}"
         - "{{ ramdisk_result.results }}"
-  when: os_images_upload | bool
 
-# This variable is unset before we set it, and it does not appear to be
-# possible to unset a variable in Ansible.
-- name: Set a fact to reset the Ansible python interpreter
-  set_fact:
-    ansible_python_interpreter: /usr/bin/python
+    # This variable is unset before we set it, and it does not appear to be
+    # possible to unset a variable in Ansible.
+    - name: Set a fact to reset the Ansible python interpreter
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python
+
+  when: os_images_upload | bool
