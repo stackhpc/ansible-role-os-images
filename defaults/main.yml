@@ -49,3 +49,6 @@ os_images_dib_version:
 # Each item should be a dict containing 'repo', 'local', and optionally,
 # 'version' items.
 os_images_git_elements: []
+
+# Whether to upload built images to Glance.
+os_images_upload: True

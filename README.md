@@ -49,6 +49,8 @@ following parameters:
 
 `os_images_elements`: An optional list of paths for site-specific DIB elements.
 
+`os_images_upload`: Whether to upload built images to Glance. Defaults to `True`.
+
 Dependencies
 ------------
 
