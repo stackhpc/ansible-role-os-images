@@ -1,10 +1,31 @@
 ---
-- name: Ensure Ansible uses virtualenv python interpreter
-  set_fact:
-    ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
+- name: Ensure qemu-img is installed
+  yum:
+    name: qemu-img
+    state: installed
+  # This complicated Jinja expression counts the images with a 'type' of
+  # 'qcow2' or no 'type'.
+  when: >
+    os_images_list |
+    map(attribute='type') |
+    map('default', 'qcow2') |
+    select('equalto', 'qcow2') |
+    list |
+    length > 0
+  become: True
+
+# The rpm-distro element executes 'semanage' during its cleanup phase.
+- name: Ensure diskimage-builder SELinux dependencies are installed
+  yum:
+    name: policycoreutils-python
+    state: installed
+  when:
+    - ansible_selinux != False
+    - "ansible_selinux.mode != 'disabled'"
+  become: True
 
 - name: Ensure download cache dir exists
-  file: 
+  file:
     path: "{{ os_images_cache }}"
     state: directory
 
@@ -25,7 +46,7 @@
       version: "{{ os_images_dib_version }}"
 
 - name: Git clone any additional image element repos
-  git: 
+  git:
     repo: "{{ item.repo }}"
     dest: "{{ item.local }}"
     version: "{{ item.version | default('HEAD') }}"
@@ -40,62 +61,103 @@
   command: >
     {{ os_images_venv }}/bin/disk-image-create
       {% if item.size is defined %}--image-size {{ item.size }}{% endif %}
+      {% if item.type is defined %}-t {{ item.type }}{% endif %}
       {{ os_images_common }}
       {{ item.elements | join( ' ' ) }} -o {{ item.name }}
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
-    creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+    creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
   environment: "{{ os_image_dib_env_default | combine(item.env | default({})) }}"
   with_items: "{{ os_images_list }}"
+  failed_when: false
+  register: result
+  # The output of this command can be quite large, and is not very useful as
+  # a JSON blob.
+  no_log: true
 
-- name: Upload cloud tenant kernel for baremetal images
-  os_image:
-    auth_type: "{{ os_images_auth_type }}"
-    auth: "{{ os_images_auth }}"
-    name: "{{ item.name ~ '-kernel' }}"
-    state: present
-    is_public: yes
-    container_format: aki
-    disk_format: aki
-    filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
-  with_items: "{{ os_images_list }}"
-  when: "{{ 'baremetal' in item.elements }}"
-  register: kernel_result
+- name: Ensure DIB build logs are copied if the image failed to build
+  copy:
+    content: "{{ item.0[item.1] }}"
+    dest: "{{ os_images_cache }}/{{ item.0.item.name }}/{{ item.0.item.name }}.{{ item.1 }}"
+  with_nested:
+    - "{{ result.results }}"
+    - [stdout, stderr]
+  when:
+    - not item.0|skipped
+    - item.0.rc != 0
+    - item.1 in item.0
+  # The output of this command can be quite large, and is not very useful as
+  # a JSON blob.
+  no_log: true
 
-- name: Upload cloud tenant ramdisk for baremetal images
-  os_image:
-    auth_type: "{{ os_images_auth_type }}"
-    auth: "{{ os_images_auth }}"
-    name: "{{ item.name ~ '-ramdisk' }}"
-    state: present
-    is_public: yes
-    container_format: ari
-    disk_format: ari
-    filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
-  with_items: "{{ os_images_list }}"
-  when: "{{ 'baremetal' in item.elements }}"
-  register: ramdisk_result
-
-- name: Upload cloud tenant images
-  os_image: 
-    auth_type: "{{ os_images_auth_type }}"
-    auth: "{{ os_images_auth }}"
-    name: "{{ item.0.name }}"
-    state: present
-    is_public: yes
-    container_format: bare
-    disk_format: qcow2
-    filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.qcow2"
-    properties: "{{ os_images_common_properties | combine(item.0.properties | default({})) or omit }}"
-    kernel: "{{ item.1.id if 'baremetal' in item.0.elements else omit }}"
-    ramdisk: "{{ item.2.id if 'baremetal' in item.0.elements else omit }}"
+- name: Fail if any images failed to build
+  fail:
+    msg: >
+      Image {{ item.0.name }} failed to build. See
+      {{ item.0.name }}.stdout and {{ item.0.name }}.stderr in
+      {{ os_images_cache }}/{{ item.0.name }}.
+  when: item.1 != 0
+  # Avoid iterating over the results directly as the output can be large, and
+  # adding no_log will suppress the failure message.
   with_together:
     - "{{ os_images_list }}"
-    - "{{ kernel_result.results }}"
-    - "{{ ramdisk_result.results }}"
+    - "{{ result.results | map(attribute='rc') | list }}"
 
-# This variable is unset before we set it, and it does not appear to be
-# possible to unset a variable in Ansible.
-- name: Set a fact to reset the Ansible python interpreter
-  set_fact:
-    ansible_python_interpreter: /usr/bin/python
+- block:
+    - name: Ensure Ansible uses virtualenv python interpreter
+      set_fact:
+        ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
+
+    - name: Upload cloud tenant kernel for baremetal images
+      os_image:
+        auth_type: "{{ os_images_auth_type }}"
+        auth: "{{ os_images_auth }}"
+        name: "{{ item.name ~ '-kernel' }}"
+        state: present
+        is_public: yes
+        container_format: aki
+        disk_format: aki
+        filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
+      with_items: "{{ os_images_list }}"
+      when: "{{ 'baremetal' in item.elements }}"
+      register: kernel_result
+
+    - name: Upload cloud tenant ramdisk for baremetal images
+      os_image:
+        auth_type: "{{ os_images_auth_type }}"
+        auth: "{{ os_images_auth }}"
+        name: "{{ item.name ~ '-ramdisk' }}"
+        state: present
+        is_public: yes
+        container_format: ari
+        disk_format: ari
+        filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
+      with_items: "{{ os_images_list }}"
+      when: "{{ 'baremetal' in item.elements }}"
+      register: ramdisk_result
+
+    - name: Upload cloud tenant images
+      os_image:
+        auth_type: "{{ os_images_auth_type }}"
+        auth: "{{ os_images_auth }}"
+        name: "{{ item.0.name }}"
+        state: present
+        is_public: yes
+        container_format: bare
+        disk_format: "{{ item.type | default('qcow2') }}"
+        filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.{{ item.type | default('qcow2') }}"
+        properties: "{{ os_images_common_properties | combine(item.0.properties | default({})) or omit }}"
+        kernel: "{{ item.1.id if 'baremetal' in item.0.elements else omit }}"
+        ramdisk: "{{ item.2.id if 'baremetal' in item.0.elements else omit }}"
+      with_together:
+        - "{{ os_images_list }}"
+        - "{{ kernel_result.results }}"
+        - "{{ ramdisk_result.results }}"
+
+    # This variable is unset before we set it, and it does not appear to be
+    # possible to unset a variable in Ansible.
+    - name: Set a fact to reset the Ansible python interpreter
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python
+
+  when: os_images_upload | bool

@@ -24,6 +24,7 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #       os_distro: centos
 #     env:
 #       DIB_XXX: yyy
+#     type: qcow2
 os_images_list: []
 
 # Common properties to apply to all glance images.
@@ -44,3 +45,11 @@ os_images_auth:
 
 # Pin to a specific version of diskimage-builder if required
 os_images_dib_version:
+
+# List of git repositories containing site-specific diskimage-builder elements.
+# Each item should be a dict containing 'repo', 'local', and optionally,
+# 'version' items.
+os_images_git_elements: []
+
+# Whether to upload built images to Glance.
+os_images_upload: True
