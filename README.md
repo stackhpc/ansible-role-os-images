@@ -20,7 +20,8 @@ It defaults to `~/disk_images`
 `os_images_auth_type`: OpenStack authentication endpoint and credentials.
 Defaults to `password`.
 
-`os_images_auth`: OpenStack authentication endpoint and credentials.  For example, a dict of the form:
+`os_images_auth`: OpenStack authentication endpoint and credentials.  For
+example, a dict of the form:
 * `auth_url`: Keystone auth endpoint URL.  Defaults to `OS_AUTH_URL`.
 * `project`: OpenStack tenant/project.  Defaults to `OS_TENANT_NAME`.
 * `username`: OpenStack username.  Defaults to `OS_USERNAME`.
@@ -33,7 +34,10 @@ Defaults to `password`.
   This is a dict of the form of `KEY: VALUE`.
 * `size`: (optional) size to make the image filesystem.
 * `properties`: (optional) dict of properties to set on the glance image.
-* `type`: (optional) image type. Default in DIB is qcow2.
+  Common image properties are available
+  [here](https://docs.openstack.org/glance/latest/user/common-image-properties.html).
+* `type`: (optional) image type. Default in DIB is qcow2. Image formats are
+  available [here](https://docs.openstack.org/image-guide/image-formats.html).
 
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `cloud-init enable-serial-console stable-interface-names`.
