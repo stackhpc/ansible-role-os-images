@@ -52,6 +52,7 @@ following parameters:
 * `local`: local path for git cloning
 * `version`: optional git reference (branch, tag, hash) for cloning.  Defaults
   to `HEAD`
+* `elements_path`: optional relative path to elements within the repository.
 
 `os_images_elements`: An optional list of paths for site-specific DIB elements.
 
