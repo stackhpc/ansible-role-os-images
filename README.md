@@ -50,7 +50,9 @@ locally for incorporation into the images.  Supply a list of dicts with the
 following parameters:
 * `repo`: URL to a git repo for cloning (if not already present)
 * `local`: local path for git cloning
-* `ref`: optional git reference (branch, tag, hash) for cloning.  Defaults to `HEAD`
+* `version`: optional git reference (branch, tag, hash) for cloning.  Defaults
+  to `HEAD`
+* `elements_path`: optional relative path to elements within the repository.
 
 `os_images_elements`: An optional list of paths for site-specific DIB elements.
 
