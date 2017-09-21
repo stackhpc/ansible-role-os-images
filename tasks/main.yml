@@ -47,8 +47,12 @@
 
 - name: Set a fact containing paths to DIB elements
   set_fact:
+    os_images_elements_path: "{{ os_images_elements }}"
+
+- name: Incorporate git-sourced DIB elements
+  set_fact:
     os_images_elements_path: >
-      {{ os_images_elements_path | default(os_images_elements) +
+      {{ os_images_elements_path +
          [item.local ~ '/' ~ item.elements_path] }}
   with_items: "{{ os_images_git_elements }}"
   when: item.elements_path is defined
