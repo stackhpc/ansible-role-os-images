@@ -124,7 +124,7 @@
         disk_format: aki
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
       with_items: "{{ os_images_list }}"
-      when: "{{ 'baremetal' in item.elements }}"
+      when: '"baremetal" in item.elements'
       register: kernel_result
 
     - name: Upload cloud tenant ramdisk for baremetal images
@@ -138,7 +138,7 @@
         disk_format: ari
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
       with_items: "{{ os_images_list }}"
-      when: "{{ 'baremetal' in item.elements }}"
+      when: '"baremetal" in item.elements'
       register: ramdisk_result
 
     - name: Upload cloud tenant images
