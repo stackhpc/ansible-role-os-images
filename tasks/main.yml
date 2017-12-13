@@ -109,6 +109,10 @@
     - "{{ result.results | map(attribute='rc') | list }}"
 
 - block:
+    - name: Set a fact about the current python interpreter
+      set_fact:
+        old_ansible_python_interpreter: "{{ ansible_python_interpreter | default('/usr/bin/python') }}"
+
     - name: Ensure Ansible uses virtualenv python interpreter
       set_fact:
         ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
@@ -163,6 +167,6 @@
     # possible to unset a variable in Ansible.
     - name: Set a fact to reset the Ansible python interpreter
       set_fact:
-        ansible_python_interpreter: /usr/bin/python
+        ansible_python_interpreter: "{{ old_ansible_python_interpreter }}"
 
   when: os_images_upload | bool
