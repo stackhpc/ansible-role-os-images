@@ -31,7 +31,7 @@
 - name: Download the image to the directory when an image_url is defined
   get_url:
     url: "{{ item.image_url }}"
-    dest: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+    dest: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.{{ item.type | default('qcow2') }}"
   with_items: "{{ os_images_list }}"
   when: item.image_url is defined
 
@@ -170,8 +170,10 @@
         disk_format: "{{ item.type | default('qcow2') }}"
         filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.{{ item.type | default('qcow2') }}"
         properties: "{{ os_images_common_properties | combine(item.0.properties | default({})) or omit }}"
-        kernel: "{{ item.1.id if item.0.elements is defined and 'baremetal' in item.0.elements else omit }}"
-        ramdisk: "{{ item.2.id if item.0.elements is defined and 'baremetal' in item.0.elements else omit }}"
+        kernel: "{{ item.1.id if is_baremetal else omit }}"
+        ramdisk: "{{ item.2.id if is_baremetal else omit }}"
+      vars:
+        is_baremetal: "{{ item.0.elements is defined and 'baremetal' in item.0.elements }}"
       with_together:
         - "{{ os_images_list }}"
         - "{{ kernel_result.results }}"
