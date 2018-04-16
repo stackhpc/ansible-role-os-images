@@ -28,6 +28,15 @@
     state: directory
   with_items: "{{ os_images_list }}"
 
+- debug: var=os_images_cache
+
+- name: Download the image to the directory when an image_url is defined
+  get_url:
+    url: "{{ item.image_url }}"
+    dest: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.qcow2"
+  with_items: "{{ os_images_list }}"
+  when: item.image_url is defined
+
 - name: Install a suitable version of diskimage-builder
   pip:
     name: "{{ item.name }}"
@@ -78,6 +87,7 @@
   register: result
   # The output of this command can be quite large, and is not very useful as
   # a JSON blob.
+  when: item.image_url is not defined
   no_log: true
 
 - name: Ensure DIB build logs are copied if the image failed to build
@@ -101,7 +111,9 @@
       Image {{ item.0.name }} failed to build. See
       {{ item.0.name }}.stdout and {{ item.0.name }}.stderr in
       {{ os_images_cache }}/{{ item.0.name }}.
-  when: item.1 != 0
+  when:
+    - item.0.image_url is not defined
+    - item.1 != 0
   # Avoid iterating over the results directly as the output can be large, and
   # adding no_log will suppress the failure message.
   with_together:
@@ -128,7 +140,9 @@
         disk_format: aki
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
       with_items: "{{ os_images_list }}"
-      when: '"baremetal" in item.elements'
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
       register: kernel_result
 
     - name: Upload cloud tenant ramdisk for baremetal images
@@ -142,7 +156,9 @@
         disk_format: ari
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
       with_items: "{{ os_images_list }}"
-      when: '"baremetal" in item.elements'
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
       register: ramdisk_result
 
     - name: Upload cloud tenant images
@@ -156,8 +172,8 @@
         disk_format: "{{ item.type | default('qcow2') }}"
         filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.{{ item.type | default('qcow2') }}"
         properties: "{{ os_images_common_properties | combine(item.0.properties | default({})) or omit }}"
-        kernel: "{{ item.1.id if 'baremetal' in item.0.elements else omit }}"
-        ramdisk: "{{ item.2.id if 'baremetal' in item.0.elements else omit }}"
+        kernel: "{{ item.1.id if item.0.elements is defined and 'baremetal' in item.0.elements else omit }}"
+        ramdisk: "{{ item.2.id if item.0.elements is defined and 'baremetal' in item.0.elements else omit }}"
       with_together:
         - "{{ os_images_list }}"
         - "{{ kernel_result.results }}"
