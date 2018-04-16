@@ -28,8 +28,6 @@
     state: directory
   with_items: "{{ os_images_list }}"
 
-- debug: var=os_images_cache
-
 - name: Download the image to the directory when an image_url is defined
   get_url:
     url: "{{ item.image_url }}"
