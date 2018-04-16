@@ -85,7 +85,7 @@
   register: result
   # The output of this command can be quite large, and is not very useful as
   # a JSON blob.
-  when: item.image_url is not defined
+  when: item.elements is defined
   no_log: true
 
 - name: Ensure DIB build logs are copied if the image failed to build
@@ -110,7 +110,7 @@
       {{ item.0.name }}.stdout and {{ item.0.name }}.stderr in
       {{ os_images_cache }}/{{ item.0.name }}.
   when:
-    - item.0.image_url is not defined
+    - item.0.elements is defined
     - item.1 != 0
   # Avoid iterating over the results directly as the output can be large, and
   # adding no_log will suppress the failure message.
