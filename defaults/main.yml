@@ -25,6 +25,11 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #     env:
 #       DIB_XXX: yyy
 #     type: qcow2
+#   - name: FedoraAtomic27
+#     image_url: https://ftp.icm.edu.pl/pub/Linux/dist/fedora-alt/atomic/stable/Fedora-Atomic-27-20180326.1/CloudImages/x86_64/images/Fedora-Atomic-27-20180326.1.x86_64.qcow2
+#     properties:
+#       os_distro: fedora-atomic
+#     type: qcow2
 os_images_list: []
 
 # Common properties to apply to all glance images.

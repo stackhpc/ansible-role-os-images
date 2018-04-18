@@ -27,9 +27,11 @@ example, a dict of the form:
 * `username`: OpenStack username.  Defaults to `OS_USERNAME`.
 * `password`: OpenStack password.  Defaults to `OS_PASSWORD`.
 
-`os_images_list` is a list of YAML dicts, each containing:
+`os_images_list` is a list of YAML dicts, where `elements` and `image_url` are
+mutually exclusive where each contain:
 * `name`: the image name to use in OpenStack.
 * `elements`: a list of diskimage-builder elements to incorporate into the image.
+* `image_url`: the URL to image location on the Internet.
 * `env`: (optional) environment variables to define for diskimage-builder parameters.
   This is a dict of the form of `KEY: VALUE`.
 * `size`: (optional) size to make the image filesystem.
@@ -85,6 +87,11 @@ The following playbook generates a guest image and uploads it to OpenStack:
             env:
               DIB_ALASKA_DELETE_REPO: "y"
               DIB_ALASKA_PKGLIST: "pam-python pam-keystone"
+          - name: FedoraAtomic27
+            image_url: https://ftp.icm.edu.pl/pub/Linux/dist/fedora-alt/atomic/stable/Fedora-Atomic-27-20180326.1/CloudImages/x86_64/images/Fedora-Atomic-27-20180326.1.x86_64.qcow2
+            properties:
+              os_distro: fedora-atomic
+            type: qcow
 
 Author Information
 ------------------
