@@ -88,10 +88,10 @@ The following playbook generates a guest image and uploads it to OpenStack:
               DIB_ALASKA_DELETE_REPO: "y"
               DIB_ALASKA_PKGLIST: "pam-python pam-keystone"
           - name: FedoraAtomic27
-	    image_url: https://ftp.icm.edu.pl/pub/Linux/dist/fedora-alt/atomic/stable/Fedora-Atomic-27-20180326.1/CloudImages/x86_64/images/Fedora-Atomic-27-20180326.1.x86_64.qcow2
-	    properties:
-	      os_distro: fedora-atomic
-	    type: qcow
+            image_url: https://ftp.icm.edu.pl/pub/Linux/dist/fedora-alt/atomic/stable/Fedora-Atomic-27-20180326.1/CloudImages/x86_64/images/Fedora-Atomic-27-20180326.1.x86_64.qcow2
+            properties:
+              os_distro: fedora-atomic
+            type: qcow
 
 Author Information
 ------------------
