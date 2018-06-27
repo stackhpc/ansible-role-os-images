@@ -72,7 +72,7 @@ The following playbook generates a guest image and uploads it to OpenStack:
     - name: Generate guest image and upload
       hosts: openstack
       roles:
-        - role: stackhpc.os-image
+        - role: stackhpc.os-images
           os_images_auth:
             auth_url:     "{{ lookup('env','OS_AUTH_URL') }}"
             username:     "{{ lookup('env','OS_USERNAME') }}"
