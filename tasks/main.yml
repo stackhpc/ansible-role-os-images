@@ -28,6 +28,7 @@
     state: absent
   when: (item.force_rebuild | bool if item.force_rebuild is defined else os_images_force_rebuild | bool)
   with_items: "{{ os_images_list }}"
+  tags: clean
 
 - name: Generate per-image cache directories
   file:
@@ -145,6 +146,7 @@
         - item.elements is defined 
         - '"baremetal" in item.elements'
         - (item.force_rebuild | bool if item.force_rebuild is defined else os_images_force_rebuild | bool)
+      tags: clean
 
     - name: Upload cloud tenant kernel for baremetal images
       os_image:
@@ -173,6 +175,7 @@
         - item.elements is defined 
         - '"baremetal" in item.elements'
         - (item.force_rebuild | bool if item.force_rebuild is defined else os_images_force_rebuild | bool)
+      tags: clean
 
     - name: Upload cloud tenant ramdisk for baremetal images
       os_image:
@@ -197,6 +200,7 @@
         name: "{{ item.name }}"
         state: absent
       with_items: "{{ os_images_list }}"
+      tags: clean
 
     - name: Upload cloud tenant images
       os_image:
