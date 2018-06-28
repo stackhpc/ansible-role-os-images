@@ -58,3 +58,6 @@ os_images_git_elements: []
 
 # Whether to upload built images to Glance.
 os_images_upload: True
+
+# Whether or not the images should be rebuilt if they already exist
+os_images_force_rebuild: False
