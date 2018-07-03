@@ -143,7 +143,10 @@
         image: "{{ item.name ~ '-kernel' }}"
       with_items: "{{ os_images_list }}"
       register: kernel_facts
-
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
+      
     - name: Compute the MD5 checksum of the kernel images
       stat:
         path: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
@@ -152,7 +155,10 @@
         mime: False
       with_items: "{{ os_images_list }}"
       register: kernel_checksums
-
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
+      
     # with ansible >= 2.5 we could use os_image_facts without an image name
     - name: Gather facts about cloud tenant ramdisk images
       os_image_facts:
@@ -161,7 +167,10 @@
         image: "{{ item.name ~ '-ramdisk' }}"
       with_items: "{{ os_images_list }}"
       register: ramdisk_facts
-
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
+      
     - name: Compute the MD5 checksum of the ramdisk images
       stat:
         path: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
@@ -170,6 +179,9 @@
         mime: False
       with_items: "{{ os_images_list }}"
       register: ramdisk_checksums
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
 
     # with ansible >= 2.5 we could use os_image_facts without an image name
     - name: Gather facts about cloud tenant images
@@ -188,6 +200,30 @@
         mime: False
       with_items: "{{ os_images_list }}"
       register: image_checksums
+
+    - name: Set fact containing local checksums
+      vars:
+        query: "[*].stat.{key: path , value: checksum}"
+        results: >
+          {{ (kernel_checksums.results | default([]) + ramdisk_checksums.results | default([]) +
+          image_checksums.results | default([])) }}
+      set_fact:
+        local_checksums: "{{ local_checksums | default({}) | combine({item.key | basename : item.value})}}"
+      with_items: "{{ results | json_query(query) }}"
+
+    - name: debug
+      debug:
+        var: local_checksums
+      
+    - name: Set fact containing glance checksums
+      vars:
+        query: "[*].ansible_facts.openstack_image.{key: name, value: checksum}"
+        results: >
+          {{ (kernel_facts.results | default([]) + ramdisk_facts.results | default([]) +
+          image_facts.results | default([])) }}
+      set_fact:
+        glance_checksums: "{{ glance_checksums | default({}) | combine({item.key: item.value})}}"
+      with_items: "{{ results | json_query(query) }}"
 
     - name: Ensure existing cloud tenant kernel does not exist
       os_image:
