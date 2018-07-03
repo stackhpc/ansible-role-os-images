@@ -22,6 +22,14 @@
     path: "{{ os_images_cache }}"
     state: directory
 
+- name: Remove old images for force rebuild
+  file:
+    path: "{{ os_images_cache }}/{{ item.name }}"
+    state: absent
+  when: item.force_rebuild | default(os_images_force_rebuild) | bool
+  with_items: "{{ os_images_list }}"
+  tags: clean
+
 - name: Generate per-image cache directories
   file:
     path: "{{ os_images_cache }}/{{ item.name }}"
@@ -127,6 +135,19 @@
       set_fact:
         ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
 
+    - name: Ensure existing cloud tenant kernel does not exist
+      os_image:
+        auth_type: "{{ os_images_auth_type }}"
+        auth: "{{ os_images_auth }}"
+        name: "{{ item.name ~ '-kernel' }}"
+        state: absent
+      with_items: "{{ os_images_list }}"
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
+        - item.force_rebuild | default(os_images_force_rebuild) | bool
+      tags: clean
+
     - name: Upload cloud tenant kernel for baremetal images
       os_image:
         auth_type: "{{ os_images_auth_type }}"
@@ -143,6 +164,19 @@
         - '"baremetal" in item.elements'
       register: kernel_result
 
+    - name: Ensure existing cloud tenant ramdisk does not exist
+      os_image:
+        auth_type: "{{ os_images_auth_type }}"
+        auth: "{{ os_images_auth }}"
+        name: "{{ item.name ~ '-ramdisk' }}"
+        state: absent
+      with_items: "{{ os_images_list }}"
+      when:
+        - item.elements is defined 
+        - '"baremetal" in item.elements'
+        - item.force_rebuild | default(os_images_force_rebuild) | bool
+      tags: clean
+
     - name: Upload cloud tenant ramdisk for baremetal images
       os_image:
         auth_type: "{{ os_images_auth_type }}"
@@ -158,6 +192,16 @@
         - item.elements is defined 
         - '"baremetal" in item.elements'
       register: ramdisk_result
+
+    - name: Ensure existing cloud tenant image does not exist
+      os_image:
+        auth_type: "{{ os_images_auth_type }}"
+        auth: "{{ os_images_auth }}"
+        name: "{{ item.name }}"
+        state: absent
+      with_items: "{{ os_images_list }}"
+      when: item.force_rebuild | default(os_images_force_rebuild) | bool
+      tags: clean
 
     - name: Upload cloud tenant images
       os_image:

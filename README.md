@@ -40,6 +40,10 @@ mutually exclusive where each contain:
   [here](https://docs.openstack.org/glance/latest/user/common-image-properties.html).
 * `type`: (optional) image type. Default in DIB is qcow2. Image formats are
   available [here](https://docs.openstack.org/image-guide/image-formats.html).
+* `force_rebuild`: (optional) boolean flag indicating whether or not the image should always
+  be built (even if an existing image that name has been built before). The images on glance
+  will be replaced if `os_images_upload` is set to `True`. This defaults to 
+  `os_images_force_rebuild`if left unset.
 
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `cloud-init enable-serial-console stable-interface-names`.
@@ -59,6 +63,10 @@ following parameters:
 `os_images_elements`: An optional list of paths for site-specific DIB elements.
 
 `os_images_upload`: Whether to upload built images to Glance. Defaults to `True`.
+
+`os_images_force_rebuild`: Whether or not to force a rebuild of the DIB image. The images on Glance
+will be replaced with the newly built image if `os_images_upload` is set to `True`. Defaults to
+`False`.
 
 Dependencies
 ------------
