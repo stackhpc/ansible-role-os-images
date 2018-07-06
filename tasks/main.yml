@@ -33,7 +33,7 @@
   file:
     path: "{{ os_images_cache }}/{{ item.name }}"
     state: absent
-  when: item.force_rebuild | default(os_images_force_rebuild) | bool
+  when: False #item.force_rebuild | default(os_images_force_rebuild) | bool
   with_items: "{{ os_images_list }}"
   tags: clean
 

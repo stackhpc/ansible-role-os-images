@@ -72,7 +72,8 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 must be one of the following strings:
 * `rename`: rename old image to append creation timestamp
 * `overwrite`: remove old image
-Defaults to `rename`
+
+Defaults to `rename`.
 
 
 Dependencies
