@@ -61,3 +61,16 @@ os_images_upload: True
 
 # Whether or not the images should be rebuilt if they already exist
 os_images_force_rebuild: False
+
+# What to do when an image with the same name already exists:
+#   - rename: rename old image to append creation timestamp
+#   - overwrite: remove old image
+os_images_overwrite_policy: rename
+
+# Environmental variables for openstack CLI
+openstack_auth_env:
+  OS_PROJECT_NAME: "{{ os_images_auth.project_name }}"
+  OS_USERNAME: "{{ os_images_auth.username }}"
+  OS_PASSWORD: "{{ os_images_auth.password  }}"
+  OS_AUTH_URL: "{{ os_images_auth.auth_url }}"
+
