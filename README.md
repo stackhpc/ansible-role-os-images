@@ -11,6 +11,14 @@ The OpenStack APIs should be accessible from the target host.
 Client credentials should have been set in the environment, or
 using the `clouds.yaml` format.
 
+You must use a virtualenv with system site packages enabled
+as this role relies on python packages installed by the package
+manager, e.g:
+
+```
+virtualenv --system-site-packages ~/venvs/dib
+```
+
 Role Variables
 --------------
 
