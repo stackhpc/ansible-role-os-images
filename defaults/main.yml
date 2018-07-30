@@ -40,7 +40,7 @@ os_images_common_properties:
 os_images_auth_type: password
 
 # OpenStack authentication credentials:
-# For exmaple, take OpenStack authentication credentials from the environment
+# For example, take OpenStack authentication credentials from the environment
 #os_images_auth:
 #  auth_url:     "{{ lookup('env','OS_AUTH_URL') }}"
 #  username:     "{{ lookup('env','OS_USERNAME') }}"

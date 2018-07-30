@@ -35,6 +35,8 @@ example, a dict of the form:
 * `username`: OpenStack username.  Defaults to `OS_USERNAME`.
 * `password`: OpenStack password.  Defaults to `OS_PASSWORD`.
 
+`os_images_cacert` is an optional path to a CA certificate bundle.
+
 `os_images_list` is a list of YAML dicts, where `elements` and `image_url` are
 mutually exclusive where each contain:
 * `name`: the image name to use in OpenStack.
