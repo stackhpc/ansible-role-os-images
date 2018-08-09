@@ -21,6 +21,7 @@
   file:
     path: "{{ os_images_cache }}"
     state: directory
+  become: True
 
 - name: Remove old images for force rebuild
   file:
