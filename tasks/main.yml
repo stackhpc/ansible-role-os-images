@@ -143,7 +143,7 @@
         state: absent
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
         - item.force_rebuild | default(os_images_force_rebuild) | bool
       tags: clean
@@ -160,7 +160,7 @@
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
       register: kernel_result
 
@@ -172,7 +172,7 @@
         state: absent
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
         - item.force_rebuild | default(os_images_force_rebuild) | bool
       tags: clean
@@ -189,7 +189,7 @@
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
       register: ramdisk_result
 
