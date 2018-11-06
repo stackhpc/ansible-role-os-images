@@ -1,0 +1,15 @@
+---
+
+- name: Rename old image
+  vars:
+    appendix: "-{{ glance_metadata[image_key].timestamp }}"
+    checksum_differs: >-
+      {{ glance_metadata[image_key]["checksum"] != local_checksums[checksum_key] }}
+    force_rebuild: item.force_rebuild | default(os_images_force_rebuild) | bool
+  command: >
+    {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}
+  environment: "{{ os_images_auth_env }}"
+  changed_when: False
+  when:
+    - image_key in glance_metadata
+    - force_rebuild or checksum_differs

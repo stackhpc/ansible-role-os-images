@@ -232,37 +232,25 @@
 
     - name: Ensure existing cloud tenant kernel does not exist
       vars:
-        image_key: "{{ item.name ~ '-kernel' }}"
-      os_image:
-        auth_type: "{{ os_images_auth_type }}"
-        auth: "{{ os_images_auth }}"
-        name: "{{ item.name ~ '-kernel' }}"
-        state: absent
-      with_items:
-        - "{{ os_images_list }}"
+        image_key: "{{ item.name }}-kernel"
+        checksum_key: '{{ item.name ~ ".vmlinuz" }}'
+      include_tasks: delete.yml
+      with_items: "{{ os_images_list }}"
       when:
+        - os_images_overwrite_policy == "overwrite"
         - item.elements is defined
         - '"baremetal" in item.elements'
-        - item.force_rebuild | default(os_images_force_rebuild) | bool
-        - os_images_overwrite_policy == "overwrite"
-        - image_key in glance_metadata
-        - glance_metadata[image_key]["checksum"] != local_checksums[item.name ~ '.vmlinuz']
-      tags: clean
 
     - name: Rename old kernel
       vars:
         image_key: "{{ item.name }}-kernel"
-        appendix: "-{{ glance_metadata[image_key].timestamp }}"
-      command: >
-        {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}
-      environment: "{{ os_images_auth_env }}"
+        checksum_key: '{{ item.name ~ ".vmlinuz" }}'
+      include_tasks: rename.yml
       with_items: "{{ os_images_list }}"
-      changed_when: False
       when:
-        - item.force_rebuild | default(os_images_force_rebuild) | bool
         - os_images_overwrite_policy == "rename"
-        - image_key in glance_metadata
-        - glance_metadata[image_key]["checksum"] != local_checksums[item.name ~ ".vmlinuz"]
+        - item.elements is defined
+        - '"baremetal" in item.elements'
 
     - name: Upload cloud tenant kernel for baremetal images
       os_image:
@@ -283,35 +271,24 @@
     - name: Rename old ramdisk
       vars:
         image_key: "{{ item.name }}-ramdisk"
-        appendix: "-{{ glance_metadata[image_key].timestamp }}"
-      command: >
-        {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}
-      environment: "{{ os_images_auth_env }}"
+        checksum_key: '{{ item.name ~ ".initrd" }}'
+      include_tasks: rename.yml
       with_items: "{{ os_images_list }}"
-      changed_when: False
       when:
-        - item.force_rebuild | default(os_images_force_rebuild) | bool
         - os_images_overwrite_policy == "rename"
-        - image_key in glance_metadata
-        - glance_metadata[image_key]["checksum"] != local_checksums[item.name ~ ".initrd"]
+        - item.elements is defined
+        - '"baremetal" in item.elements'
 
     - name: Ensure existing cloud tenant ramdisk does not exist
       vars:
-        image_key: "{{ item.name ~ '-ramdisk' }}"
-      os_image:
-        auth_type: "{{ os_images_auth_type }}"
-        auth: "{{ os_images_auth }}"
-        name: "{{ image_key }}"
-        state: absent
+        image_key: "{{ item.name }}-ramdisk"
+        checksum_key: '{{ item.name ~ ".initrd" }}'
+      include_tasks: delete.yml
       with_items: "{{ os_images_list }}"
       when:
+        - os_images_overwrite_policy == "overwrite"
         - item.elements is defined
         - '"baremetal" in item.elements'
-        - item.force_rebuild | default(os_images_force_rebuild) | bool
-        - os_images_overwrite_policy == "overwrite"
-        - image_key in glance_metadata
-        - glance_metadata[image_key]["checksum"] != local_checksums[item.name ~ '.initrd']
-      tags: clean
 
     - name: Upload cloud tenant ramdisk for baremetal images
       os_image:
@@ -331,36 +308,23 @@
 
     - name: Ensure existing cloud tenant image does not exist
       vars:
-        file_extension: ".{{ item.type | default('qcow2') }}"
         image_key: "{{ item.name }}"
-      os_image:
-        auth_type: "{{ os_images_auth_type }}"
-        auth: "{{ os_images_auth }}"
-        name: "{{ image_key }}"
-        state: absent
+        file_extension: ".{{ item.type | default('qcow2') }}"
+        checksum_key: '{{ item.name ~ file_extension }}'
+      include_tasks: delete.yml
       with_items: "{{ os_images_list }}"
       when:
-        - item.force_rebuild | default(os_images_force_rebuild) | bool
-        - os_images_overwrite_policy == "overwrite"
-        - image_key in glance_metadata
-        - glance_metadata[image_key]["checksum"] != local_checksums[item.name ~ file_extension]
-      tags: clean
+        - os_images_overwrite_policy == "rename"
 
     - name: Rename old image
       vars:
         image_key: "{{ item.name }}"
         file_extension: ".{{ item.type | default('qcow2') }}"
-        appendix: "-{{ glance_metadata[item.name].timestamp }}"
-      command: >
-        {{ os_images_venv }}/bin/openstack image set {{ item.name }} --property name={{ item.name ~ appendix}}
-      environment: "{{ os_images_auth_env }}"
+        checksum_key: '{{ item.name ~ file_extension }}'
+      include_tasks: rename.yml
       with_items: "{{ os_images_list }}"
-      changed_when: False
       when:
-        - item.force_rebuild | default(os_images_force_rebuild) | bool
         - os_images_overwrite_policy == "rename"
-        - image_key in glance_metadata
-        - glance_metadata[image_key]["checksum"] != local_checksums[item.name ~ file_extension]
 
     - name: Upload cloud tenant images
       os_image:
