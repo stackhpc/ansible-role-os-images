@@ -4,7 +4,6 @@
   vars:
     checksum_differs: >-
       {{ glance_metadata[image_key]["checksum"] != local_checksums[checksum_key] }}
-    force_rebuild: "{{ item.force_rebuild | default(os_images_force_rebuild) | bool }}"
   os_image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
@@ -12,5 +11,5 @@
     state: absent
   when:
     - image_key in glance_metadata
-    - force_rebuild or checksum_differs
+    - checksum_differs
   tags: clean
