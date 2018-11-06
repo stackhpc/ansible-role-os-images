@@ -218,6 +218,10 @@
         local_checksums: "{{ local_checksums | default({}) | combine({item.key | basename : item.value | basename })}}"
       with_items: "{{ results | json_query(query) }}"
 
+    - name: Set default value for glance_metadata
+      set_fact:
+        glance_metadata: {}
+
     - name: Set fact containing glance metadata
       vars:
         query: "[*].ansible_facts.openstack_image.{key: name, checksum: checksum, ctime: ctime}"
@@ -314,7 +318,7 @@
       include_tasks: delete.yml
       with_items: "{{ os_images_list }}"
       when:
-        - os_images_overwrite_policy == "rename"
+        - os_images_overwrite_policy == "delete"
 
     - name: Rename old image
       vars:
