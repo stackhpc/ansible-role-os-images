@@ -151,9 +151,9 @@
       with_items: "{{ os_images_list }}"
       register: kernel_facts
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
-      
+
     - name: Compute the MD5 checksum of the kernel images
       stat:
         path: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
@@ -163,9 +163,9 @@
       with_items: "{{ os_images_list }}"
       register: kernel_checksums
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
-      
+
     # with ansible >= 2.5 we could use os_image_facts without an image name
     - name: Gather facts about cloud tenant ramdisk images
       os_image_facts:
@@ -175,9 +175,9 @@
       with_items: "{{ os_images_list }}"
       register: ramdisk_facts
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
-      
+
     - name: Compute the MD5 checksum of the ramdisk images
       stat:
         path: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
@@ -187,7 +187,7 @@
       with_items: "{{ os_images_list }}"
       register: ramdisk_checksums
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
 
     # with ansible >= 2.5 we could use os_image_facts without an image name
@@ -217,7 +217,7 @@
       set_fact:
         local_checksums: "{{ local_checksums | default({}) | combine({item.key | basename : item.value | basename })}}"
       with_items: "{{ results | json_query(query) }}"
-      
+
     - name: Set fact containing glance metadata
       vars:
         query: "[*].ansible_facts.openstack_image.{key: name, checksum: checksum, ctime: ctime}"
@@ -241,7 +241,7 @@
       with_items:
         - "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
         - item.force_rebuild | default(os_images_force_rebuild) | bool
         - os_images_overwrite_policy == "overwrite"
@@ -254,7 +254,7 @@
         image_key: "{{ item.name }}-kernel"
         appendix: "-{{ glance_metadata[image_key].timestamp }}"
       command: >
-        {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}  
+        {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}
       environment: "{{ os_images_auth_env }}"
       with_items: "{{ os_images_list }}"
       changed_when: False
@@ -276,7 +276,7 @@
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
       register: kernel_result
 
@@ -285,7 +285,7 @@
         image_key: "{{ item.name }}-ramdisk"
         appendix: "-{{ glance_metadata[image_key].timestamp }}"
       command: >
-        {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}  
+        {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}
       environment: "{{ os_images_auth_env }}"
       with_items: "{{ os_images_list }}"
       changed_when: False
@@ -305,7 +305,7 @@
         state: absent
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
         - item.force_rebuild | default(os_images_force_rebuild) | bool
         - os_images_overwrite_policy == "overwrite"
@@ -325,7 +325,7 @@
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
       with_items: "{{ os_images_list }}"
       when:
-        - item.elements is defined 
+        - item.elements is defined
         - '"baremetal" in item.elements'
       register: ramdisk_result
 
@@ -352,7 +352,7 @@
         file_extension: ".{{ item.type | default('qcow2') }}"
         appendix: "-{{ glance_metadata[item.name].timestamp }}"
       command: >
-        {{ os_images_venv }}/bin/openstack image set {{ item.name }} --property name={{ item.name ~ appendix}}  
+        {{ os_images_venv }}/bin/openstack image set {{ item.name }} --property name={{ item.name ~ appendix}}
       environment: "{{ os_images_auth_env }}"
       with_items: "{{ os_images_list }}"
       changed_when: False
