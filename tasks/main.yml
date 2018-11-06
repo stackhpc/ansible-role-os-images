@@ -255,7 +255,7 @@
         appendix: "-{{ glance_metadata[image_key].timestamp }}"
       command: >
         {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}  
-      environment: "{{ openstack_auth_env }}"
+      environment: "{{ os_images_auth_env }}"
       with_items: "{{ os_images_list }}"
       changed_when: False
       when:
@@ -286,7 +286,7 @@
         appendix: "-{{ glance_metadata[image_key].timestamp }}"
       command: >
         {{ os_images_venv }}/bin/openstack image set {{ image_key }} --property name={{ image_key ~ appendix}}  
-      environment: "{{ openstack_auth_env }}"
+      environment: "{{ os_images_auth_env }}"
       with_items: "{{ os_images_list }}"
       changed_when: False
       when:
@@ -327,7 +327,6 @@
       when:
         - item.elements is defined 
         - '"baremetal" in item.elements'
-
       register: ramdisk_result
 
     - name: Ensure existing cloud tenant image does not exist
@@ -337,7 +336,7 @@
       os_image:
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
-        name: "{{ item.name }}"
+        name: "{{ image_key }}"
         state: absent
       with_items: "{{ os_images_list }}"
       when:
@@ -354,7 +353,7 @@
         appendix: "-{{ glance_metadata[item.name].timestamp }}"
       command: >
         {{ os_images_venv }}/bin/openstack image set {{ item.name }} --property name={{ item.name ~ appendix}}  
-      environment: "{{ openstack_auth_env }}"
+      environment: "{{ os_images_auth_env }}"
       with_items: "{{ os_images_list }}"
       changed_when: False
       when:

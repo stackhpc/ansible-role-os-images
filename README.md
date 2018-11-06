@@ -22,10 +22,28 @@ Defaults to `password`.
 
 `os_images_auth`: OpenStack authentication endpoint and credentials.  For
 example, a dict of the form:
-* `auth_url`: Keystone auth endpoint URL.  Defaults to `OS_AUTH_URL`.
-* `project`: OpenStack tenant/project.  Defaults to `OS_TENANT_NAME`.
-* `username`: OpenStack username.  Defaults to `OS_USERNAME`.
-* `password`: OpenStack password.  Defaults to `OS_PASSWORD`.
+* `auth_url`: Keystone auth endpoint URL.  Defaults to `os_images_auth_env[OS_AUTH_URL]`.
+* `project`: OpenStack tenant/project.  Defaults to `os_images_auth_env[OS_TENANT_NAME]`.
+* `username`: OpenStack username.  Defaults to `os_images_auth_env[OS_USERNAME]`.
+* `password`: OpenStack password.  Defaults to `os_images_auth_env[OS_PASSWORD]`.
+
+`os_images_auth_env`:
+* `OS_PROJECT_DOMAIN_NAME`: Keystone domain name containing the project.
+  Defaults to `"{{ lookup('env', 'OS_PROJECT_DOMAIN_NAME') }}"`
+* `OS_USER_DOMAIN_NAME`: Keystone user's domain name.
+  Defaults to `"{{ lookup('env', 'OS_USER_DOMAIN_NAME') }}"`
+* `OS_PROJECT_NAME`: Keystone project name.
+  Defaults to `"{{ lookup('env', 'OS_PROJECT_NAME') }}"`
+* `OS_USERNAME`: Keystone user name.
+  Defaults to `"{{ lookup('env', 'OS_USERNAME') }}"`
+* `OS_PASSWORD`: Keystone password.
+  Defaults to `"{{ lookup('env', 'OS_PASSWORD') }}"`
+* `OS_AUTH_URL`: Keystone authentication URL.
+  Defaults to `"{{ lookup('env', 'OS_AUTH_URL') }}"`
+* `OS_INTERFACE`: Interface type, can be one of: [admin, public, internal].
+  Defaults to `"{{ lookup('env', 'OS_INTERFACE') }}"`
+* `OS_IDENTITY_API_VERSION`: Keystone identity API version.
+  Defaults to `"{{ lookup('env', 'OS_IDENTITY_API_VERSION') }}"`
 
 `os_images_list` is a list of YAML dicts, where `elements` and `image_url` are
 mutually exclusive where each contain:
@@ -78,6 +96,8 @@ Defaults to `rename`.
 
 Dependencies
 ------------
+
+This has a dependency on `jmespath` as we use the `json_query` filter in the ansible playbooks.
 
 Example Playbook
 ----------------

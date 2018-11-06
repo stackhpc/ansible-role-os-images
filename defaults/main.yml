@@ -47,6 +47,12 @@ os_images_auth_type: password
 #  password:     "{{ lookup('env','OS_PASSWORD') }}"
 #  project_name: "{{ lookup('env','OS_TENANT_NAME') }}"
 os_images_auth:
+  project_domain_name: "{{ os_images_auth_env['OS_PROJECT_DOMAIN_NAME'] }}"
+  user_domain_name: "{{ os_images_auth_env['OS_USER_DOMAIN_NAME'] }}"
+  project_name: "{{ os_images_auth_env['OS_PROJECT_NAME'] }}"
+  username: "{{ os_images_auth_env['OS_USERNAME'] }}"
+  password: "{{ os_images_auth_env['OS_PASSWORD'] }}"
+  auth_url: "{{ os_images_auth_env['OS_AUTH_URL'] }}"
 
 # Pin to a specific version of diskimage-builder if required
 os_images_dib_version:
@@ -68,9 +74,12 @@ os_images_force_rebuild: False
 os_images_overwrite_policy: rename
 
 # Environmental variables for openstack CLI
-openstack_auth_env:
-  OS_PROJECT_NAME: "{{ os_images_auth.project_name }}"
-  OS_USERNAME: "{{ os_images_auth.username }}"
-  OS_PASSWORD: "{{ os_images_auth.password  }}"
-  OS_AUTH_URL: "{{ os_images_auth.auth_url }}"
-
+os_images_auth_env:
+  OS_PROJECT_DOMAIN_NAME: "{{ lookup('env', 'OS_PROJECT_DOMAIN_NAME') }}"
+  OS_USER_DOMAIN_NAME: "{{ lookup('env', 'OS_USER_DOMAIN_NAME') }}"
+  OS_PROJECT_NAME: "{{ lookup('env', 'OS_PROJECT_NAME') }}"
+  OS_USERNAME: "{{ lookup('env', 'OS_USERNAME') }}"
+  OS_PASSWORD: "{{ lookup('env', 'OS_PASSWORD') }}"
+  OS_AUTH_URL: "{{ lookup('env', 'OS_AUTH_URL') }}"
+  OS_INTERFACE: "{{ lookup('env', 'OS_INTERFACE') }}"
+  OS_IDENTITY_API_VERSION: "{{ lookup('env', 'OS_IDENTITY_API_VERSION') }}"
