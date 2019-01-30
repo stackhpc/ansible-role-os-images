@@ -23,7 +23,7 @@
     name: policycoreutils-python
     state: installed
   when:
-    - ansible_selinux != False
+    - ansible_selinux
     - "ansible_selinux.status != 'disabled'"
     - ansible_os_family == "RedHat"
   become: True
