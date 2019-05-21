@@ -115,7 +115,7 @@
     - "{{ result.results }}"
     - [stdout, stderr]
   when:
-    - not item.0|skipped
+    - item.0 is not skipped
     - item.0.rc != 0
     - item.1 in item.0
   # The output of this command can be quite large, and is not very useful as
