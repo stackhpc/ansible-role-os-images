@@ -96,7 +96,7 @@
       {{ os_images_common }}
       {{ item.elements | join( ' ' ) }}
       -o {{ item.name }}
-  shell: "{{ os_images_venv }}/bin/disk-image-create {{ dib_args }} | tee {{ item.name }}.stdout"
+  shell: "{{ os_images_venv }}/bin/disk-image-create {{ dib_args }} > {{ item.name }}.stdout 2> {{ item.name }}.stderr"
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
@@ -107,21 +107,6 @@
   # The output of this command can be quite large, and is not very useful as
   # a JSON blob.
   when: item.elements is defined
-  no_log: true
-
-- name: Ensure DIB build logs are copied if the image failed to build
-  copy:
-    content: "{{ item.0[item.1] }}"
-    dest: "{{ os_images_cache }}/{{ item.0.item.name }}/{{ item.0.item.name }}.{{ item.1 }}"
-  with_nested:
-    - "{{ result.results }}"
-    - [stdout, stderr]
-  when:
-    - item.0 is not skipped
-    - item.0.rc != 0
-    - item.1 in item.0
-  # The output of this command can be quite large, and is not very useful as
-  # a JSON blob.
   no_log: true
 
 - name: Fail if any images failed to build
