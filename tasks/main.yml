@@ -89,12 +89,14 @@
       ELEMENTS_PATH: "{{ os_images_elements_path | join(':') }}"
 
 - name: Generate diskimage-builder images
-  command: >
-    {{ os_images_venv }}/bin/disk-image-create
+  vars:
+    dib_args: >-
       {% if item.size is defined %}--image-size {{ item.size }}{% endif %}
       {% if item.type is defined %}-t {{ item.type }}{% endif %}
       {{ os_images_common }}
-      {{ item.elements | join( ' ' ) }} -o {{ item.name }}
+      {{ item.elements | join( ' ' ) }}
+      -o {{ item.name }}
+  shell: "{{ os_images_venv }}/bin/disk-image-create {{ dib_args }} | tee {{ item.name }}.stdout"
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
