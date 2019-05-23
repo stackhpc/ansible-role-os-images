@@ -31,7 +31,10 @@
 - name: Ensure download cache dir exists
   file:
     path: "{{ os_images_cache }}"
+    owner: "{{ ansible_user_uid }}"
+    group: "{{ ansible_user_gid }}"
     state: directory
+  become: True
 
 - name: Remove old images for force rebuild
   file:
@@ -44,8 +47,11 @@
 - name: Generate per-image cache directories
   file:
     path: "{{ os_images_cache }}/{{ item.name }}"
+    owner: "{{ ansible_user_uid }}"
+    group: "{{ ansible_user_gid }}"
     state: directory
   with_items: "{{ os_images_list }}"
+  become: True
 
 - name: Download the image to the directory when an image_url is defined
   get_url:
