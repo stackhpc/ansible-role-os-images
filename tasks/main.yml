@@ -1,4 +1,9 @@
 ---
+- name: Install squashfs-tools to provide unsquashfs binary (Debian and RedHat)
+  package:
+    name: squashfs-tools
+    state: present
+
 - name: Set fact containing package needed for qemu-img (debian)
   set_fact:
     qemu_img_pkg: qemu-utils
