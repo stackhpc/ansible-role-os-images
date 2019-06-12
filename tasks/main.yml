@@ -3,6 +3,7 @@
   package:
     name: squashfs-tools
     state: present
+  become: True
 
 - name: Set fact containing package needed for qemu-img (debian)
   set_fact:
