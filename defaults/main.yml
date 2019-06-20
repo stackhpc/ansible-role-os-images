@@ -5,6 +5,9 @@ os_images_venv:
 # State of python dependencies.
 os_images_package_state: present
 
+# Upper constraints file for installation of python dependencies.
+os_images_upper_constraints_file:
+
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 
