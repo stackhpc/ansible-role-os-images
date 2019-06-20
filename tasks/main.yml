@@ -70,7 +70,7 @@
   pip:
     name: "{{ item.name }}"
     version: "{{ item.version or omit }}"
-    state: present
+    state: "{{ os_images_package_state }}"
     virtualenv: "{{ os_images_venv }}"
   with_items:
     - name: diskimage-builder

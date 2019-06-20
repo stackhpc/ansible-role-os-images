@@ -1,7 +1,9 @@
 ---
-# Path to virtualenv in which to install shade, diskimage-builder and their
-# dependencies.
+# Path to virtualenv in which to install python dependencies.
 os_images_venv:
+
+# State of python dependencies.
+os_images_package_state: present
 
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
