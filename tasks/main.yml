@@ -8,11 +8,13 @@
 - name: Set fact containing package needed for qemu-img (debian)
   set_fact:
     qemu_img_pkg: qemu-utils
+    xz_pkg: xz-utils
   when: ansible_os_family == "Debian"
 
 - name: Set fact containing package needed for qemu-img (redhat)
   set_fact:
     qemu_img_pkg: qemu-img
+    xz_pkg: xz
   when: ansible_os_family == "RedHat"
 
 # qemu-img is required when building qcow images, or extracting cloud images in
@@ -20,6 +22,13 @@
 - name: Ensure qemu-img is installed
   package:
     name: "{{ qemu_img_pkg }}"
+    state: present
+  become: True
+
+# xz is required for unpackaing cloud images ending with xz
+- name: Ensure xz is installed
+  package:
+    name: "{{ xz_pkg }}"
     state: present
   become: True
 
@@ -59,11 +68,19 @@
   with_items: "{{ os_images_list }}"
   become: True
 
-- name: Download the image to the directory when an image_url is defined
-  get_url:
-    url: "{{ item.image_url }}"
-    dest: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.{{ item.type | default('qcow2') }}"
-  with_items: "{{ os_images_list }}"
+- block:
+    - name: Download the image to the directory when an image_url is defined
+      get_url:
+        url: "{{ item.image_url }}"
+        dest: "{{ image_dest }}"
+      with_items: "{{ os_images_list }}"
+    - name: Unpack the image if .xz format
+      command: unxz --keep --force {{ image_dest }}
+      when: image_is_xz
+      with_items: "{{ os_images_list }}"
+  vars:
+    image_dest: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.{{ item.type | default('qcow2') }}{{ '.xz' if image_is_xz else '' }}"
+    image_is_xz: "{{ item.image_url.endswith('.xz') }}"
   when: item.image_url is defined
 
 - name: Install a suitable version of diskimage-builder
