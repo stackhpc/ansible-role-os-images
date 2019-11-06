@@ -165,6 +165,7 @@
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
         cacert: "{{ os_images_cacert | default(omit) }}"
+        interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name ~ '-kernel' }}"
         state: absent
       with_items: "{{ os_images_list }}"
@@ -179,6 +180,7 @@
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
         cacert: "{{ os_images_cacert | default(omit) }}"
+        interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name ~ '-kernel' }}"
         state: present
         is_public: yes
@@ -196,6 +198,7 @@
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
         cacert: "{{ os_images_cacert | default(omit) }}"
+        interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name ~ '-ramdisk' }}"
         state: absent
       with_items: "{{ os_images_list }}"
@@ -210,6 +213,7 @@
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
         cacert: "{{ os_images_cacert | default(omit) }}"
+        interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name ~ '-ramdisk' }}"
         state: present
         is_public: yes
@@ -227,6 +231,7 @@
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
         cacert: "{{ os_images_cacert | default(omit) }}"
+        interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name }}"
         state: absent
       with_items: "{{ os_images_list }}"
@@ -238,6 +243,7 @@
         auth_type: "{{ os_images_auth_type }}"
         auth: "{{ os_images_auth }}"
         cacert: "{{ os_images_cacert | default(omit) }}"
+        interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.0.name }}"
         state: present
         is_public: yes

@@ -53,6 +53,10 @@ os_images_auth_type: password
 #  project_name: "{{ lookup('env','OS_TENANT_NAME') }}"
 os_images_auth:
 
+# Endpoint URL type to fetch from the service catalog. Maybe be one of:
+# public, admin, or internal.
+os_images_interface:
+
 # Pin to a specific version of diskimage-builder if required
 os_images_dib_version:
 
