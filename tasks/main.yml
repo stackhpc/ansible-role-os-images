@@ -36,7 +36,7 @@
 - name: Ensure diskimage-builder SELinux dependencies are installed
   yum:
     name: policycoreutils-python
-    state: installed
+    state: present
   when:
     - ansible_selinux
     - "ansible_selinux.status != 'disabled'"
