@@ -29,6 +29,8 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #       os_distro: centos
 #     env:
 #       DIB_XXX: yyy
+#     packages:
+#       - biosdevname
 #     type: qcow2
 #   - name: FedoraAtomic27
 #     image_url: https://ftp.icm.edu.pl/pub/Linux/dist/fedora-alt/atomic/stable/Fedora-Atomic-27-20180326.1/CloudImages/x86_64/images/Fedora-Atomic-27-20180326.1.x86_64.qcow2

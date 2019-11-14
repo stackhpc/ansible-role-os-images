@@ -44,6 +44,7 @@ mutually exclusive where each contain:
 * `image_url`: the URL to image location on the Internet.
 * `env`: (optional) environment variables to define for diskimage-builder parameters.
   This is a dict of the form of `KEY: VALUE`.
+* `packages`: (optional) list of packages to install in the image.
 * `size`: (optional) size to make the image filesystem.
 * `properties`: (optional) dict of properties to set on the glance image.
   Common image properties are available

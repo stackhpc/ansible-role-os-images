@@ -123,6 +123,7 @@
     dib_args: >-
       {% if item.size is defined %}--image-size {{ item.size }}{% endif %}
       {% if item.type is defined %}-t {{ item.type }}{% endif %}
+      {% if item.packages is defined %}-p {{ item.packages | join(',') }}{% endif %}
       {{ os_images_common }}
       {{ item.elements | join( ' ' ) }}
       -o {{ item.name }}
