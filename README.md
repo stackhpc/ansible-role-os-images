@@ -37,6 +37,9 @@ example, a dict of the form:
 
 `os_images_cacert` is an optional path to a CA certificate bundle.
 
+`os_images_interface` is the endpoint URL type to fetch from the service
+catalog. Maybe be one of `public`, `admin`, or `internal`.
+
 `os_images_list` is a list of YAML dicts, where `elements` and `image_url` are
 mutually exclusive where each contain:
 * `name`: the image name to use in OpenStack.
