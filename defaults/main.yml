@@ -72,3 +72,6 @@ os_images_upload: True
 
 # Whether or not the images should be rebuilt if they already exist
 os_images_force_rebuild: False
+
+# Whether images should be public (requires admin rights)
+os_images_public: True
