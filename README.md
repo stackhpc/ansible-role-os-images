@@ -82,6 +82,8 @@ following parameters:
 will be replaced with the newly built image if `os_images_upload` is set to `True`. Defaults to
 `False`.
 
+`os_images_public`: Whether uploaded images are public. Defaults to `True` - note this requires admin permissions.
+
 Dependencies
 ------------
 
