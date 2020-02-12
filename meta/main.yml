@@ -23,10 +23,10 @@ galaxy_info:
     - openstack
 
 dependencies:
-  - role: stackhpc.os-shade
-    os_shade_venv: "{{ os_images_venv }}"
-    os_shade_state: "{{ os_images_package_state }}"
-    os_shade_upper_constraints: "{{ os_images_upper_constraints }}"
+  - role: stackhpc.os_openstacksdk
+    os_openstacksdk_venv: "{{ os_images_venv }}"
+    os_openstacksdk_state: "{{ os_images_package_state }}"
+    os_openstacksdk_upper_constraints: "{{ os_images_upper_constraints }}"
 
   - role: stackhpc.os-openstackclient
     os_openstackclient_venv: "{{ os_images_venv }}"
