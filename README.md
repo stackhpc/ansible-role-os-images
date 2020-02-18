@@ -84,6 +84,8 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 
 `os_images_public`: Whether uploaded images are public. Defaults to `True` - note this requires admin permissions.
 
+`os_images_venv`: Path to virtualenv in which to install python dependencies.
+
 Dependencies
 ------------
 
