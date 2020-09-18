@@ -251,8 +251,8 @@
         state: present
         is_public: "{{ os_images_public | bool }}"
         container_format: bare
-        disk_format: "{{ item.type | default('qcow2') }}"
-        filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.{{ item.type | default('qcow2') }}"
+        disk_format: "{{ item.0.type | default('qcow2') }}"
+        filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.{{ item.0.type | default('qcow2') }}"
         properties: "{{ os_images_common_properties | combine(item.0.properties | default({})) or omit }}"
         kernel: "{{ item.1.id if is_baremetal else omit }}"
         ramdisk: "{{ item.2.id if is_baremetal else omit }}"
