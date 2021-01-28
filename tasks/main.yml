@@ -129,7 +129,7 @@
       {{ os_images_common }}
       {{ item.elements | join( ' ' ) }}
       -o {{ item.name }}
-  shell: "source {{ os_images_venv }}/bin/activate && disk-image-create {{ dib_args }} > {{ item.name }}.stdout 2> {{ item.name }}.stderr"
+  shell: ". {{ os_images_venv }}/bin/activate && disk-image-create {{ dib_args }} > {{ item.name }}.stdout 2> {{ item.name }}.stderr"
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
