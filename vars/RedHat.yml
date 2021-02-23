@@ -1,0 +1,7 @@
+---
+# List of package dependencies.
+os_images_package_dependencies:
+  - kpartx
+  - qemu-img
+  - squashfs-tools
+  - xz

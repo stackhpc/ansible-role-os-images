@@ -1,34 +1,10 @@
 ---
-- name: Install squashfs-tools to provide unsquashfs binary (Debian and RedHat)
+- name: Include OS family-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Ensure required packages are installed
   package:
-    name: squashfs-tools
-    state: present
-  become: True
-
-- name: Set fact containing package needed for qemu-img (debian)
-  set_fact:
-    qemu_img_pkg: qemu-utils
-    xz_pkg: xz-utils
-  when: ansible_os_family == "Debian"
-
-- name: Set fact containing package needed for qemu-img (redhat)
-  set_fact:
-    qemu_img_pkg: qemu-img
-    xz_pkg: xz
-  when: ansible_os_family == "RedHat"
-
-# qemu-img is required when building qcow images, or extracting cloud images in
-# qcow format.
-- name: Ensure qemu-img is installed
-  package:
-    name: "{{ qemu_img_pkg }}"
-    state: present
-  become: True
-
-# xz is required for unpackaing cloud images ending with xz
-- name: Ensure xz is installed
-  package:
-    name: "{{ xz_pkg }}"
+    name: "{{ os_images_package_dependencies | select | list }}"
     state: present
   become: True
 
