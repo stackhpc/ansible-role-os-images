@@ -131,14 +131,6 @@
     - "{{ result.results }}"
 
 - block:
-    - name: Set a fact about the current python interpreter
-      set_fact:
-        old_ansible_python_interpreter: "{{ ansible_python_interpreter | default('/usr/bin/python') }}"
-
-    - name: Ensure Ansible uses virtualenv python interpreter
-      set_fact:
-        ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
-
     - name: Ensure existing cloud tenant kernel does not exist
       os_image:
         auth_type: "{{ os_images_auth_type }}"
@@ -239,10 +231,6 @@
         - "{{ kernel_result.results }}"
         - "{{ ramdisk_result.results }}"
 
-    # This variable is unset before we set it, and it does not appear to be
-    # possible to unset a variable in Ansible.
-    - name: Set a fact to reset the Ansible python interpreter
-      set_fact:
-        ansible_python_interpreter: "{{ old_ansible_python_interpreter }}"
-
+  vars:
+    ansible_python_interpreter: "{{ os_images_venv }}/bin/python"
   when: os_images_upload | bool
