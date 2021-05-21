@@ -1,6 +1,6 @@
 ---
 - name: Include OS family-specific variables
-  include_vars: "{{ ansible_os_family }}.yml"
+  include_vars: "{{ ansible_facts.os_family }}.yml"
 
 - name: Ensure required packages are installed
   package:
@@ -11,21 +11,21 @@
 # The rpm-distro element executes 'semanage' during its cleanup phase.
 - name: Ensure diskimage-builder SELinux dependencies are installed
   vars:
-    package_name: "{{ 'policycoreutils-python' if ansible_distribution_major_version | int == 7 else 'python3-policycoreutils' }}"
+    package_name: "{{ 'policycoreutils-python' if ansible_facts.distribution_major_version | int == 7 else 'python3-policycoreutils' }}"
   package:
     name: "{{ package_name }}"
     state: present
   when:
-    - ansible_selinux
-    - "ansible_selinux.status != 'disabled'"
-    - ansible_os_family == "RedHat"
+    - ansible_facts.selinux
+    - "ansible_facts.selinux.status != 'disabled'"
+    - ansible_facts.os_family == "RedHat"
   become: True
 
 - name: Ensure download cache dir exists
   file:
     path: "{{ os_images_cache }}"
-    owner: "{{ ansible_user_uid }}"
-    group: "{{ ansible_user_gid }}"
+    owner: "{{ ansible_facts.user_uid }}"
+    group: "{{ ansible_facts.user_gid }}"
     state: directory
   become: True
 
@@ -40,8 +40,8 @@
 - name: Generate per-image cache directories
   file:
     path: "{{ os_images_cache }}/{{ item.name }}"
-    owner: "{{ ansible_user_uid }}"
-    group: "{{ ansible_user_gid }}"
+    owner: "{{ ansible_facts.user_uid }}"
+    group: "{{ ansible_facts.user_gid }}"
     state: directory
   with_items: "{{ os_images_list }}"
   become: True
