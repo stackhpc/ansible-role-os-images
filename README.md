@@ -53,10 +53,10 @@ mutually exclusive where each contain:
   Common image properties are available
   [here](https://docs.openstack.org/glance/latest/user/common-image-properties.html).
 * `type`: (optional) image type. Default in DIB is qcow2. Image formats are
-  available [here](https://docs.openstack.org/image-guide/image-formats.html).
+  available [here](https://docs.openstack.org/glance/latest/user/formats.html).
 * `force_rebuild`: (optional) boolean flag indicating whether or not the image should always
   be built (even if an existing image that name has been built before). The images on glance
-  will be replaced if `os_images_upload` is set to `True`. This defaults to 
+  will be replaced if `os_images_upload` is set to `True`. This defaults to
   `os_images_force_rebuild`if left unset.
 
 `os_images_common`: A set of elements to include in every image listed.
