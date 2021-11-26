@@ -1,7 +1,9 @@
 ---
 # List of package dependencies.
 os_images_package_dependencies:
+  - dosfstools
   - kpartx
+  - lvm2
   - qemu-utils
   - squashfs-tools
   - xz-utils
