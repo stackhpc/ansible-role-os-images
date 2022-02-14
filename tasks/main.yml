@@ -217,7 +217,8 @@
         interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.0.name }}"
         state: present
-        is_public: "{{ os_images_public | bool }}"
+        is_public: "{{ item.0.is_public | default(os_images_public) | bool }}"
+        owner: "{{ item.0.owner | default(omit) }}"
         container_format: bare
         disk_format: "{{ item.0.type | default('qcow2') }}"
         filename: "{{ os_images_cache }}/{{ item.0.name }}/{{ item.0.name }}.{{ item.0.type | default('qcow2') }}"

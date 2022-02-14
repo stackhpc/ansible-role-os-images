@@ -58,6 +58,9 @@ mutually exclusive where each contain:
   be built (even if an existing image that name has been built before). The images on glance
   will be replaced if `os_images_upload` is set to `True`. This defaults to
   `os_images_force_rebuild`if left unset.
+* `is_public`: (optional) whether the image should be set as visible to all
+  projects or kept private.
+* `owner`: (optional) ID of the project that should own the uploaded image.
 
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `cloud-init enable-serial-console stable-interface-names`.
