@@ -154,7 +154,7 @@
         interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name ~ '-kernel' }}"
         state: present
-        is_public: "{{ os_images_public | bool }}"
+        is_public: "{{ item.is_public | default(os_images_public) | bool }}"
         container_format: aki
         disk_format: aki
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
@@ -187,7 +187,7 @@
         interface: "{{ os_images_interface | default(omit, true) }}"
         name: "{{ item.name ~ '-ramdisk' }}"
         state: present
-        is_public: "{{ os_images_public | bool }}"
+        is_public: "{{ item.is_public | default(os_images_public) | bool }}"
         container_format: ari
         disk_format: ari
         filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
