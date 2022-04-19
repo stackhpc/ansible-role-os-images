@@ -69,7 +69,7 @@
     virtualenv: "{{ os_images_venv }}"
     extra_args: "{% if os_images_upper_constraints_file %}-c {{ os_images_upper_constraints_file }}{% endif %}"
   with_items:
-    - name: diskimage-builder
+    - name: "{{ os_images_dib_pkg_name }}"
       version: "{{ os_images_dib_version }}"
 
 - name: Git clone any additional image element repos

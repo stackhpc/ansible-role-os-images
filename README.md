@@ -65,6 +65,10 @@ mutually exclusive where each contain:
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `cloud-init enable-serial-console stable-interface-names`.
 
+`os_images_dib_pkg_name`: Optionally customise the name parameter passed 
+to the ansible.builtin.pip module when installing diskimage-builder. This can
+be used to install diskimage-builder from version control.
+
 `os_images_dib_version`: Optionally set a version of diskimage-builder to install.
 By default this is not constrained.
 
