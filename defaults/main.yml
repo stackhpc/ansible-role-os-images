@@ -65,9 +65,6 @@ os_images_interface:
 # Pin to a specific version of diskimage-builder if required
 os_images_dib_version:
 
-# Customise the name parameter passed to the ansible.builtin.pip module.
-os_images_dib_pkg_name: diskimage-builder
-
 # List of git repositories containing site-specific diskimage-builder elements.
 # Each item should be a dict containing 'repo', 'local', and optionally,
 # 'version' items.
