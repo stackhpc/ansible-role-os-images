@@ -68,14 +68,19 @@ Defaults to `cloud-init enable-serial-console stable-interface-names`.
 `os_images_dib_version`: Optionally set a version of diskimage-builder to install.
 By default this is not constrained.
 
-`os_images_git_elements`: An optional list of elements to pull from github, deploy
-locally for incorporation into the images.  Supply a list of dicts with the
+`os_images_git_elements`: An optional list of repositories with elements to
+pull from github, deploy locally for incorporation into the images. Optionally
+may contain repository of the diskimage-builder when parameter 
+`diskimage_builder` is set. Supply a list of dicts with the
 following parameters:
 * `repo`: URL to a git repo for cloning (if not already present)
 * `local`: local path for git cloning
 * `version`: optional git reference (branch, tag, hash) for cloning.  Defaults
   to `HEAD`
 * `elements_path`: optional relative path to elements within the repository.
+* `diskimage_builder`: optional flag (true/false) to show that item is the 
+  diskimage-builder repository, and there is need to install diskimage-bulder
+  from source.
 
 `os_images_elements`: An optional list of paths for site-specific DIB elements.
 

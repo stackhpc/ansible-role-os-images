@@ -61,23 +61,58 @@
     image_is_xz: "{{ item.image_url.endswith('.xz') }}"
   when: item.image_url is defined
 
-- name: Install a suitable version of diskimage-builder
+- name: Git clone additional repos
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.local }}"
+    version: "{{ item.version | default('HEAD') }}"
+  with_items: "{{ os_images_git_elements }}"
+
+- name: Set facts to install diskimage-builder from source
+  set_fact:
+    os_images_dib_git_url: "{{ item.repo }}"
+    os_images_dib_path: "{{ item.local }}"
+  with_items: "{{ os_images_git_elements }}"
+  when: item.diskimage_builder is defined
+
+- name: Install diskimage-builder from source
+  block:
+    - name: Install requirements from diskimage-builder using pip
+      pip:
+        extra_args: "{% if os_images_upper_constraints_file %}-c {{ os_images_upper_constraints_file }}{% endif %}"
+        requirements: "{{ os_images_dib_path }}/requirements.txt"
+        virtualenv: "{{ os_images_venv }}"
+      environment:
+        # NOTE(mmalchuk): https://github.com/pypa/setuptools/issues/2353
+        SETUPTOOLS_USE_DISTUTILS: stdlib
+
+    - name: Install diskimage-builder from source using pip
+      pip:
+        name: "{{ os_images_dib_path }}"
+        virtualenv: "{{ os_images_venv }}"
+      environment:
+        # NOTE(mmalchuk): https://github.com/pypa/setuptools/issues/2353
+        SETUPTOOLS_USE_DISTUTILS: stdlib
+  when:
+    - os_images_dib_git_url is defined
+    - os_images_dib_path is defined
+
+- name: Install diskimage-builder from PyPI
   pip:
     name: "{{ item.name }}"
     version: "{{ item.version or omit }}"
     state: "{{ os_images_package_state }}"
     virtualenv: "{{ os_images_venv }}"
     extra_args: "{% if os_images_upper_constraints_file %}-c {{ os_images_upper_constraints_file }}{% endif %}"
+  environment:
+      # NOTE(mmalchuk): https://github.com/pypa/setuptools/issues/2353
+      SETUPTOOLS_USE_DISTUTILS: stdlib
   with_items:
     - name: diskimage-builder
       version: "{{ os_images_dib_version }}"
-
-- name: Git clone any additional image element repos
-  git:
-    repo: "{{ item.repo }}"
-    dest: "{{ item.local }}"
-    version: "{{ item.version | default('HEAD') }}"
-  with_items: "{{ os_images_git_elements }}"
+  when:
+    - os_images_dib_git_url is undefined
+    - os_images_dib_path is undefined
 
 - name: Set a fact containing paths to DIB elements
   set_fact:
