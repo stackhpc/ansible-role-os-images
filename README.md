@@ -45,6 +45,7 @@ mutually exclusive where each contain:
 * `name`: the image name to use in OpenStack.
 * `elements`: a list of diskimage-builder elements to incorporate into the image.
 * `image_url`: the URL to image location on the Internet.
+* `checksum`: Checksum to validate a downloaded image. Format: <algorithm>:<checksum|url>.
 * `env`: (optional) environment variables to define for diskimage-builder parameters.
   This is a dict of the form of `KEY: VALUE`.
 * `packages`: (optional) list of packages to install in the image.
