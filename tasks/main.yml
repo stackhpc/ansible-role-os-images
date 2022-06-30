@@ -51,6 +51,7 @@
       get_url:
         url: "{{ item.image_url }}"
         dest: "{{ image_dest }}"
+        checksum: "{{ item.checksum | default(omit) }}"
       with_items: "{{ os_images_list }}"
     - name: Unpack the image if .xz format
       command: unxz --keep --force {{ image_dest }}
