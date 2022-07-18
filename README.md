@@ -24,6 +24,7 @@ Role Variables
 
 `os_images_cache`: a path to a directory in which to cache build artefacts.
 It defaults to `~/disk_images`
+`NOTE`: new images will NOT be built, even if changes are made in config, if an image is already cached
 
 `os_images_auth_type`: OpenStack authentication endpoint and credentials.
 Defaults to `password`.
