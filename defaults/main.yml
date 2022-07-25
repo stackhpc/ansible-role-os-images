@@ -1,4 +1,7 @@
 ---
+# List of additional host package dependencies to install.
+os_images_package_dependencies_extra: []
+
 # Path to virtualenv in which to install python dependencies.
 os_images_venv:
 
