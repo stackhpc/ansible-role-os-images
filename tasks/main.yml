@@ -1,7 +1,7 @@
 ---
 - name: Set a fact about the Ansible python interpreter
   set_fact:
-    old_ansible_python_interpreter: "{{ ansible_python_interpreter | default('/usr/bin/python' + ansible_python.version.major | string) }}"
+    old_ansible_python_interpreter: "{{ ansible_python_interpreter | default('/usr/bin/python' + ansible_facts.python.version.major | string) }}"
 
 - import_tasks: images.yml
 
