@@ -4,7 +4,7 @@
 
 - name: Ensure required packages are installed
   package:
-    name: "{{ os_images_package_dependencies | select | list }}"
+    name: "{{ (os_images_package_dependencies + os_images_package_dependencies_extra) | select | list }}"
     state: present
   become: True
 

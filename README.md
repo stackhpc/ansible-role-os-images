@@ -22,6 +22,9 @@ virtualenv --system-site-packages ~/venvs/dib
 Role Variables
 --------------
 
+`os_images_package_dependencies_extra`: List of additional packages to install
+on the build host.
+
 `os_images_cache`: a path to a directory in which to cache build artefacts.
 It defaults to `~/disk_images`
 `NOTE`: new images will NOT be built, even if changes are made in config, if an image is already cached.
