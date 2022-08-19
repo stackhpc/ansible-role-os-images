@@ -8,6 +8,8 @@
     name: "{{ item.name ~ '-kernel' }}"
     state: absent
   with_items: "{{ os_images_list }}"
+  loop_contol:
+    label: "{{ item.name }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -27,6 +29,8 @@
     disk_format: aki
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
   with_items: "{{ os_images_list }}"
+  loop_contol:
+    label: "{{ item.name }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -41,6 +45,8 @@
     name: "{{ item.name ~ '-ramdisk' }}"
     state: absent
   with_items: "{{ os_images_list }}"
+  loop_contol:
+    label: "{{ item.name }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -60,6 +66,8 @@
     disk_format: ari
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
   with_items: "{{ os_images_list }}"
+  loop_contol:
+    label: "{{ item.name }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -74,6 +82,8 @@
     name: "{{ item.name }}"
     state: absent
   with_items: "{{ os_images_list }}"
+  loop_contol:
+    label: "{{ item.name }}"
   when: item.force_rebuild | default(os_images_force_rebuild) | bool
   tags: clean
 
@@ -99,3 +109,5 @@
     - "{{ os_images_list }}"
     - "{{ kernel_result.results }}"
     - "{{ ramdisk_result.results }}"
+  loop_contol:
+    label: "{{ item.0.name }}"
