@@ -67,8 +67,8 @@
     name: "{{ item.name }}"
     version: "{{ item.version or omit }}"
     state: "{{ os_images_package_state }}"
-    virtualenv: "{{ os_images_venv }}"
-    extra_args: "{% if os_images_upper_constraints_file %}-c {{ os_images_upper_constraints_file }}{% endif %}"
+    virtualenv: "{{ os_images_dib_venv }}"
+    extra_args: "{% if os_images_dib_upper_constraints_file %}-c {{ os_images_dib_upper_constraints_file }}{% endif %}"
   with_items:
     - name: "{{ os_images_dib_pkg_name }}"
       version: "{{ os_images_dib_version }}"
@@ -106,7 +106,7 @@
       {{ os_images_common }}
       {{ item.elements | join( ' ' ) }}
       -o {{ item.name }}
-  shell: ". {{ os_images_venv }}/bin/activate && disk-image-create {{ dib_args }} > {{ item.name }}.stdout 2> {{ item.name }}.stderr"
+  shell: ". {{ os_images_dib_venv }}/bin/activate && disk-image-create {{ dib_args }} > {{ item.name }}.stdout 2> {{ item.name }}.stderr"
   args:
     chdir: "{{ os_images_cache }}/{{ item.name }}"
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
