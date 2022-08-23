@@ -15,7 +15,7 @@ os_images_package_state: present
 # Use Train upper constraints when running with Python 2, to avoid
 # incompatibility with newer OSC releases. Use Yoga upper constraints
 # otherwise, to avoid incompatibility with openstacksdk 0.99.0.
-os_images_upper_constraints_file: "https://releases.openstack.org/constraints/upper/{% if ansible_facts.python.version.major == 2 %}train{% else %}yoga{% endif %}"
+os_images_upper_constraints_file: "https://releases.openstack.org/constraints/upper/{% if ansible_facts.python.version.major == 2 %}train{% else %}master{% endif %}"
 
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
