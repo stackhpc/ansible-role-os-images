@@ -97,7 +97,9 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 
 `os_images_public`: Whether uploaded images are public. Defaults to `True` - note this requires admin permissions.
 
-`os_images_venv`: Path to virtualenv in which to install python dependencies.
+`os_images_venv`: Path to virtualenv in which to install python dependencies to upload images.
+
+`os_images_dib_venv`: Path to virtualenv in which to install DIB to build images.
 
 Dependencies
 ------------

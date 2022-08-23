@@ -2,20 +2,25 @@
 # List of additional host package dependencies to install.
 os_images_package_dependencies_extra: []
 
-# Path to virtualenv in which to install python dependencies.
+# Path to virtualenv in which to install python dependencies to upload images.
 os_images_venv:
+
+# Path to virtualenv in which to install DIB to build images.
+os_images_dib_venv: "{{ os_images_venv }}"
 
 # State of python dependencies.
 os_images_package_state: present
 
-# Upper constraints file for installation of python dependencies.
+# Upper constraints file for installation of python dependencies to upload
+# images.
 #
-# Use Train upper constraints when running with Python 2, to avoid
-# incompatibility with newer OSC releases.
 # Use Train upper constraints when running with Python 2, to avoid
 # incompatibility with newer OSC releases. Use Yoga upper constraints
 # otherwise, to avoid incompatibility with openstacksdk 0.99.0.
 os_images_upper_constraints_file: "https://releases.openstack.org/constraints/upper/{% if ansible_facts.python.version.major == 2 %}train{% else %}yoga{% endif %}"
+
+# Upper constraints file for installation of DIB to build images.
+os_images_dib_upper_constraints_file: "{{ os_images_upper_constraints_file }}"
 
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
