@@ -20,7 +20,7 @@ os_images_package_state: present
 os_images_upper_constraints_file: "https://releases.openstack.org/constraints/upper/{% if ansible_facts.python.version.major == 2 %}train{% else %}yoga{% endif %}"
 
 # Upper constraints file for installation of DIB to build images.
-os_images_dib_upper_constraints_file: "{{ os_images_upper_constraints_file }}"
+os_images_dib_upper_constraints_file: ""
 
 # Path to a directory in which to cache build artefacts.
 os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
