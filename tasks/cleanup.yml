@@ -8,3 +8,4 @@
     name: "{{ item.name }}"
     state: absent
   with_items: "{{ os_images_whitelist }}"
+  
