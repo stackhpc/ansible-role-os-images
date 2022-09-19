@@ -95,3 +95,6 @@ os_images_force_rebuild: False
 
 # Whether images should be public (requires admin rights)
 os_images_public: True
+
+# Whether to cleanup images in Glance.
+os_images_cleanup: False
