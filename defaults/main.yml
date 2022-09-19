@@ -29,6 +29,9 @@ os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 # os_images_elements: [ "{{ playbook_dir }}/stackhpc-image-elements" ]
 os_images_elements: []
 
+# Image list for cleanup task whitelisting
+os_images_whitelist: CentOS-stream8-broken
+
 # Common elements to include in all images
 os_images_common: cloud-init enable-serial-console stable-interface-names
 
