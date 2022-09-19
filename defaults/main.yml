@@ -30,7 +30,7 @@ os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 os_images_elements: []
 
 # Image list for cleanup task whitelisting
-os_images_whitelist: CentOS-stream8-broken
+os_images_whitelist: []
 
 # Common elements to include in all images
 os_images_common: cloud-init enable-serial-console stable-interface-names
