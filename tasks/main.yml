@@ -11,4 +11,5 @@
   when: os_images_upload | bool
 
 - import_tasks: cleanup.yml
+    ansible_python_interpreter: "{{ os_images_venv ~ '/bin/python' if os_images_venv != None else old_ansible_python_interpreter }}"
   when: os_images_cleanup | bool
