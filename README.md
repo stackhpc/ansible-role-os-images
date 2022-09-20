@@ -101,6 +101,11 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 
 `os_images_dib_venv`: Path to virtualenv in which to install DIB to build images.
 
+`os_images_cleanup`: __CAUTION__ (optional) boolean flag indicating whether or not the images should be deleted.
+Will take the list of images specified in `os_images_delete_list`. Defaults to `False`.
+
+`os_images_delete_list`: __CAUTION__ (optional) a list of images that will be deleted from glance storage
+
 Dependencies
 ------------
 

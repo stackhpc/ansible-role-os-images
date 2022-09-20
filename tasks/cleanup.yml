@@ -1,5 +1,5 @@
 ---
-- name: Delete unauthorized images
+- name: Delete specified images from Glance
   os_image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
