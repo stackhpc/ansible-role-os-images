@@ -29,8 +29,8 @@ os_images_cache: "{{ lookup('env','HOME') }}/disk_images"
 # os_images_elements: [ "{{ playbook_dir }}/stackhpc-image-elements" ]
 os_images_elements: []
 
-# Image list for cleanup task whitelisting
-os_images_whitelist: []
+# Image list for cleanup task to delete.
+os_images_delete_list: []
 
 # Common elements to include in all images
 os_images_common: cloud-init enable-serial-console stable-interface-names
@@ -96,5 +96,5 @@ os_images_force_rebuild: False
 # Whether images should be public (requires admin rights)
 os_images_public: True
 
-# Whether to cleanup images in Glance.
+# Whether or not to cleanup images in Glance.
 os_images_cleanup: False
