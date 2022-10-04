@@ -53,6 +53,9 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 #     type: qcow2
 os_images_list: []
 
+# List of images marked for hiding.
+os_image_hide_list: []
+
 # Common properties to apply to all glance images.
 os_images_common_properties:
   cpu_arch: x86_64
@@ -92,3 +95,6 @@ os_images_force_rebuild: False
 
 # Whether images should be public (requires admin rights)
 os_images_public: True
+
+# Whether or not to hide images in Glance.
+os_images_hide: True
