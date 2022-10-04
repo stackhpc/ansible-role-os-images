@@ -54,7 +54,7 @@ os_images_common: cloud-init enable-serial-console stable-interface-names
 os_images_list: []
 
 # List of images marked for hiding.
-os_image_hide_list: []
+os_images_hide_list: []
 
 # Common properties to apply to all glance images.
 os_images_common_properties:
