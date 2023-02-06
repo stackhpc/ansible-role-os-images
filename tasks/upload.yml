@@ -79,9 +79,9 @@
 
 - name: Ensure old images are renamed
   command: >
-            {{ os_images_venv }}/bin/openstack image set {{ item.name }} --name {{ item.name }}.{{ ansible_date_time.date }}
+            {{ os_images_venv }}/bin/openstack image set {{ item.name }} --name {{ item.name }}.{{ extension }}
   vars:
-    extension: "its-alive"
+    extension: "ansible_date_time.date"
   with_items:
     - "{{ os_images_list }}"
   when: item.rename_image | default(os_images_rename_image) | bool
