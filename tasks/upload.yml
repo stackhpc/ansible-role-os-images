@@ -77,16 +77,6 @@
   when: item.force_rebuild | default(os_images_force_rebuild) | bool
   tags: clean
 
-- name: Ensure old images are renamed
-  command: >
-            {{ os_images_venv }}/bin/openstack image set {{ item.name }} --name {{ item.name }}.{{ extension }}
-  vars:
-    extension: "{{ ansible_date_time.date }}"
-  with_items:
-    - "{{ os_images_list }}"
-  when: item.rename_image | default(os_images_rename_image) | bool
-  environment: "{{ os_images_venv }}"
-
 - name: Upload cloud tenant images
   os_image:
     auth_type: "{{ os_images_auth_type }}"
@@ -109,11 +99,3 @@
     - "{{ os_images_list }}"
     - "{{ kernel_result.results }}"
     - "{{ ramdisk_result.results }}"
-
-- name: Ensure rc images are renamed
-  command: >
-            {{ os_images_venv }}/bin/openstack image set {{ item.name }} --name {{ item.name[:-3] }}
-  with_items:
-    - "{{ os_images_list }}"
-  when: item.rename_image | default(os_images_rename_image) | bool
-  environment: "{{ os_images_venv }}"
