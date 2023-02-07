@@ -101,6 +101,10 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 
 `os_images_dib_venv`: Path to virtualenv in which to install DIB to build images.
 
+`os_images_promote`: Whether or not to retire old and promote new images.
+
+`os_images_build`: Whether or not to build the images.
+
 Dependencies
 ------------
 
