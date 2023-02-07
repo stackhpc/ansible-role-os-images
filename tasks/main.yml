@@ -4,6 +4,7 @@
     old_ansible_python_interpreter: "{{ ansible_python_interpreter | default('/usr/bin/python' + ansible_facts.python.version.major | string) }}"
 
 - import_tasks: images.yml
+  when: os_images_build | bool
 
 - import_tasks: upload.yml
   vars:

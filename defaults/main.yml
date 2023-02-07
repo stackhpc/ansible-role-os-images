@@ -95,3 +95,6 @@ os_images_public: True
 
 # Whether or not should old images be retired and new images be promoted
 os_images_promote: False
+
+# Whether or not to build the images
+os_images_build: True
