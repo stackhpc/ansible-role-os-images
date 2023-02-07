@@ -92,3 +92,6 @@ os_images_force_rebuild: False
 
 # Whether images should be public (requires admin rights)
 os_images_public: True
+
+# Whether or not should old images be retired and new images be promoted
+os_images_promote: False
