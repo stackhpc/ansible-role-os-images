@@ -98,3 +98,6 @@ os_images_promote: False
 
 # Whether or not to build the images
 os_images_build: True
+
+# Image suffix which would be removed during image promotion for exmple: -rc, -dev, -test
+os_images_name_suffix:
