@@ -105,7 +105,7 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 
 `os_images_build`: Whether or not to build the images.
 
-`os_images_name_suffix`: Image suffix which would be removed during image promotion, for exmple: -rc, -dev, -test etc.
+`os_images_name_suffix`: Image suffix which would be removed during image promotion, for exmple: -rc, -dev, -test etc. Mandatory for promotion functionality.
 
 Dependencies
 ------------
