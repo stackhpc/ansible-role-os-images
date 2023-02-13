@@ -11,10 +11,13 @@
 
 - name: Ensure new images are promoted
   command: >
-            {{ os_images_venv }}/bin/openstack image set {{ item.name }}{{ extension }} --name {{ item.name[:-3] }}
+            {{ os_images_venv }}/bin/openstack image set {{ item.name }}{{ extension }} --name "{{ trimmed_name }}"
   vars:
     extension: "{{ os_images_name_suffix }}"
+    extension_length: "{{ os_images_name_suffix|length }}"
+    trimmed_name: "{{ item.name[:-(extension_length|int)] }}"
   with_items:
     - "{{ os_images_list }}"
-  when: item.rename_image | default(os_images_promote) | bool
+  when: 
+    - item.rename_image | default(os_images_promote) | bool
   environment: "{{ os_images_venv }}"
