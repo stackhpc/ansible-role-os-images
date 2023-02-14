@@ -1,0 +1,22 @@
+---
+- name: Check if image suffix is provided
+  fail:
+    msg: "os_images_name_suffix is empty please provide it."
+  when: os_images_name_suffix is defined and os_images_name_suffix | length == 0
+
+- name: Ensure old images are retired
+  command: "{{ os_images_venv }}/bin/openstack image set {{ promotion_name }} --name {{ promotion_name }}.{{ date_suffix }}"
+  vars:
+    date_suffix: "{{ ansible_date_time.date }}"
+    promotion_name: "{{ item.name[:-(os_images_name_suffix | length | int)] }}"
+  loop: "{{ os_images_list }}"
+  when: "item.rename_image | default(os_images_promote) | bool"
+  environment: "{{ os_images_venv }}"
+
+- name: Ensure new images are promoted
+  command: "{{ os_images_venv }}/bin/openstack image set {{ item.name }} --name {{ promotion_name }}"
+  vars:
+    promotion_name: "{{ item.name[:-(os_images_name_suffix | length | int)] }}"
+  loop: "{{ os_images_list }}"
+  when: "item.rename_image | default(os_images_promote) | bool"
+  environment: "{{ os_images_venv }}"
