@@ -11,6 +11,7 @@
     promotion_name: "{{ item.name[:-(os_images_name_suffix | length | int)] }}"
   loop: "{{ os_images_list }}"
   when: "item.rename_image | default(os_images_promote) | bool"
+  ignore_errors: True
   environment: "{{ os_images_venv }}"
 
 - name: Ensure new images are promoted
@@ -19,4 +20,5 @@
     promotion_name: "{{ item.name[:-(os_images_name_suffix | length | int)] }}"
   loop: "{{ os_images_list }}"
   when: "item.rename_image | default(os_images_promote) | bool"
+  ignore_errors: True
   environment: "{{ os_images_venv }}"
