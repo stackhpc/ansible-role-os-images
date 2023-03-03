@@ -101,3 +101,6 @@ os_images_build: True
 
 # Image suffix which would be removed during image promotion for exmple: -rc, -dev, -test
 os_images_name_suffix:
+
+# Whether or not to hide the images in Glance list
+os_images_hide: False
