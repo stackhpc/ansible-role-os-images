@@ -4,7 +4,7 @@
     msg: "os_images_name_suffix is empty please provide it."
   when: os_images_name_suffix is defined and os_images_name_suffix | length == 0
 
-- name: Ensure images for retirement exist
+- name: Gather information about retire candidate images
   os_image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
@@ -12,10 +12,17 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name[:-(os_images_name_suffix | length | int)] }}"
     state: present
+  register: retire_list
   loop: "{{ os_images_list }}"
+  ignore_errors: True
   when: "item.rename_image | default(os_images_promote) | bool"
 
-- name: Ensure images for promotion exist
+- name: Check if all retire candidates exist
+  fail:
+    msg: "Some of the images were not found, please check 'Gather information about retire candidate images' task output for more information"
+  when: retire_list is failed
+
+- name: Gather information about promote candidate images
   os_image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
@@ -23,8 +30,15 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name }}"
     state: present
+  register: promote_list
   loop: "{{ os_images_list }}"
+  ignore_errors: True
   when: "item.rename_image | default(os_images_promote) | bool"
+
+- name: Check if all promotion candidates exist
+  fail:
+    msg: "Some of the images were not found, please check 'Gather information about promote candidate images' task output for more information"
+  when: promote_list is failed
 
 - name: Ensure old images are retired
   command: "{{ os_images_venv }}/bin/openstack image set {{ promotion_name }} --name {{ promotion_name }}.{{ date_suffix }}"
