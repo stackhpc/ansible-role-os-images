@@ -4,7 +4,7 @@
     msg: "os_images_name_suffix is empty please provide it."
   when: os_images_name_suffix is defined and os_images_name_suffix | length == 0
 
-# os_image_info info is not used because it does not support error handling
+# NOTE: os_image_info info is not used because it does not support error handling
 - name: Gather information about retire candidate images
   os_image:
     auth_type: "{{ os_images_auth_type }}"
@@ -23,7 +23,7 @@
     msg: "Some of the images were not found, please check 'Gather information about retire candidate images' task output for more information"
   when: retire_list is failed
 
-# os_image_info info is not used because it does not support error handling
+# NOTE: os_image_info info is not used because it does not support error handling
 - name: Gather information about promote candidate images
   os_image:
     auth_type: "{{ os_images_auth_type }}"
