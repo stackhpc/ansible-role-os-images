@@ -4,6 +4,40 @@
     msg: "os_images_name_suffix is empty please provide it."
   when: os_images_name_suffix is defined and os_images_name_suffix | length == 0
 
+- name: Gather retire candidates info
+  openstack.cloud.image_info:
+    auth_type: "{{ os_images_auth_type }}"
+    auth: "{{ os_images_auth }}"
+    cacert: "{{ os_images_cacert | default(omit) }}"
+    interface: "{{ os_images_interface | default(omit, true) }}"
+  register: retire_list
+  when: item.rename_image | default(os_images_promote) | bool
+
+- name: Ensure images for retirement exist
+  assert:
+    that:
+      - item.name in retire_list.openstack_images | map(attribute='name') | list
+    fail_msg: "The image {{ item.name[:-(os_images_name_suffix | length | int)] }} does not exist."
+  loop: "{{ os_images_list }}"
+  when: item.rename_image | default(os_images_promote) | bool
+
+- name: Gather promote candidates info
+  openstack.cloud.image_info:
+    auth_type: "{{ os_images_auth_type }}"
+    auth: "{{ os_images_auth }}"
+    cacert: "{{ os_images_cacert | default(omit) }}"
+    interface: "{{ os_images_interface | default(omit, true) }}"
+  register: promote_list
+  when: item.rename_image | default(os_images_promote) | bool
+
+- name: Ensure images for promotion exist
+  assert:
+    that:
+      - item.name in promote_list.openstack_images | map(attribute='name') | list
+    fail_msg: "The image {{ item.name }} does not exist."
+  loop: "{{ os_images_list }}"
+  when: item.rename_image | default(os_images_promote) | bool
+
 - name: Hide retire candidate images
   command: "{{ os_images_venv }}/bin/openstack image set --hidden {{ promotion_name }}"
   vars:
