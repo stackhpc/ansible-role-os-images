@@ -18,7 +18,6 @@
     that:
       - item.name in retire_list.openstack_images | map(attribute='name') | list
     fail_msg: "The image {{ item.name[:-(os_images_name_suffix | length | int)] }} does not exist."
-    success_msg: "The image '{{ item.name[:-(os_images_name_suffix | length | int)] }}' exists in the cloud."
   loop: "{{ os_images_list }}"
   when: item.rename_image | default(os_images_promote) | bool
 
@@ -36,7 +35,6 @@
     that:
       - item.name in promote_list.openstack_images | map(attribute='name') | list
     fail_msg: "The image {{ item.name }} does not exist."
-    success_msg: "The image '{{ item.name }}' exists in the cloud."
   loop: "{{ os_images_list }}"
   when: item.rename_image | default(os_images_promote) | bool
 
