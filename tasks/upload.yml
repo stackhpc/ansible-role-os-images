@@ -7,7 +7,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name ~ '-kernel' }}"
     state: absent
-  with_items: "{{ os_images_list }}"
+  with_items: "{{ os_images_list | list }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -26,7 +26,7 @@
     container_format: aki
     disk_format: aki
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
-  with_items: "{{ os_images_list }}"
+  with_items: "{{ os_images_list | list }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -40,7 +40,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name ~ '-ramdisk' }}"
     state: absent
-  with_items: "{{ os_images_list }}"
+  with_items: "{{ os_images_list | list }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -59,7 +59,7 @@
     container_format: ari
     disk_format: ari
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
-  with_items: "{{ os_images_list }}"
+  with_items: "{{ os_images_list | list }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -73,7 +73,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name }}"
     state: absent
-  with_items: "{{ os_images_list }}"
+  with_items: "{{ os_images_list | list }}"
   when: item.force_rebuild | default(os_images_force_rebuild) | bool
   tags: clean
 
@@ -96,6 +96,6 @@
   vars:
     is_baremetal: "{{ item.0.elements is defined and 'baremetal' in item.0.elements }}"
   with_together:
-    - "{{ os_images_list }}"
+    - "{{ os_images_list | list }}"
     - "{{ kernel_result.results }}"
     - "{{ ramdisk_result.results }}"
