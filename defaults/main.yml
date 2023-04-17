@@ -32,6 +32,9 @@ os_images_elements: []
 # Common elements to include in all images
 os_images_common: cloud-init enable-serial-console stable-interface-names
 
+# Arbitrary command-line arguments to pass to DIB, formatted as a string.
+os_images_dib_args:
+
 # Example image definition:
 # os_images_list:
 #   - name: CentOS7-OFED4
