@@ -1,6 +1,6 @@
 ---
 - name: Ensure existing cloud tenant kernel does not exist
-  os_image:
+  openstack.cloud.image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
@@ -15,7 +15,7 @@
   tags: clean
 
 - name: Upload cloud tenant kernel for baremetal images
-  os_image:
+  openstack.cloud.image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
@@ -35,7 +35,7 @@
   register: kernel_result
 
 - name: Ensure existing cloud tenant ramdisk does not exist
-  os_image:
+  openstack.cloud.image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
@@ -50,7 +50,7 @@
   tags: clean
 
 - name: Upload cloud tenant ramdisk for baremetal images
-  os_image:
+  openstack.cloud.image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
@@ -70,7 +70,7 @@
   register: ramdisk_result
 
 - name: Ensure existing cloud tenant image does not exist
-  os_image:
+  openstack.cloud.image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
@@ -82,7 +82,7 @@
   tags: clean
 
 - name: Upload cloud tenant images
-  os_image:
+  openstack.cloud.image:
     auth_type: "{{ os_images_auth_type }}"
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
