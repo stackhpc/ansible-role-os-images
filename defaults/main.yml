@@ -93,6 +93,9 @@ os_images_force_rebuild: False
 # Whether images should be public (requires admin rights)
 os_images_public: True
 
+# Visibility of images ('public' requires admin rights.)
+os_images_visibility: "{{ 'public' if os_images_public else 'private' }}"
+
 # Whether or not should old images be retired and new images be promoted
 os_images_promote: False
 

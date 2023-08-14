@@ -22,7 +22,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name ~ '-kernel' }}"
     state: present
-    is_public: "{{ (item.is_public or item.visibility == 'public') | default(os_images_public) | bool }}"
+    is_public: "{{ (item.is_public or item.visibility == 'public') | default(os_images_visibility == 'public') | bool }}"
     container_format: aki
     disk_format: aki
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
@@ -55,7 +55,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name ~ '-ramdisk' }}"
     state: present
-    is_public: "{{ (item.is_public or item.visibility == 'public') | default(os_images_public) | bool }}"
+    is_public: "{{ (item.is_public or item.visibility == 'public') | default(os_images_visibility == 'public') | bool }}"
     container_format: ari
     disk_format: ari
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
@@ -85,7 +85,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.0.name }}"
     state: present
-    is_public: "{{ (item.0.is_public or item.0.visibility == 'public') | default(os_images_public) | bool }}"
+    is_public: "{{ (item.0.is_public or item.0.visibility == 'public') | default(os_images_visibility == 'public') | bool }}"
     owner: "{{ item.0.owner | default(omit) }}"
     container_format: bare
     disk_format: "{{ item.0.type | default('qcow2') }}"
