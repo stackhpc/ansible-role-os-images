@@ -22,11 +22,13 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name ~ '-kernel' }}"
     state: present
-    is_public: "{{ (item.is_public or item.visibility == 'public') | default(os_images_visibility == 'public') | bool }}"
+    visibility: "{{ visibility | default(os_images_visibility) | bool }}"
     container_format: aki
     disk_format: aki
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.vmlinuz"
   with_items: "{{ os_images_list | list }}"
+  vars: 
+    visibility: "{{ 'public' if item.is_public else 'private' if item.is_public == False else item.visibility }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -55,11 +57,13 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.name ~ '-ramdisk' }}"
     state: present
-    is_public: "{{ (item.is_public or item.visibility == 'public') | default(os_images_visibility == 'public') | bool }}"
+    visibility: "{{ visibility | default(os_images_visibility) | bool }}"
     container_format: ari
     disk_format: ari
     filename: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.initrd"
   with_items: "{{ os_images_list | list }}"
+  vars: 
+    visibility: "{{ 'public' if item.is_public else 'private' if item.is_public == False else item.visibility }}"
   when:
     - item.elements is defined
     - '"baremetal" in item.elements'
@@ -85,7 +89,7 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
     name: "{{ item.0.name }}"
     state: present
-    is_public: "{{ (item.0.is_public or item.0.visibility == 'public') | default(os_images_visibility == 'public') | bool }}"
+    visibility: "{{ visibility | default(os_images_visibility) | bool }}"
     owner: "{{ item.0.owner | default(omit) }}"
     container_format: bare
     disk_format: "{{ item.0.type | default('qcow2') }}"
@@ -95,6 +99,7 @@
     ramdisk: "{{ item.2.id if is_baremetal else omit }}"
   vars:
     is_baremetal: "{{ item.0.elements is defined and 'baremetal' in item.0.elements }}"
+    visibility: "{{ 'public' if item.0.is_public else 'private' if item.0.is_public == False else item.0.visibility }}"
   with_together:
     - "{{ os_images_list | list }}"
     - "{{ kernel_result.results }}"
