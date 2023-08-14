@@ -34,7 +34,7 @@
 - name: Set community images
   command: "{{ os_images_venv }}/bin/openstack image set --community {{ item.name }}"
   loop: "{{ os_images_list | list }}"
-  when: item.visiblility == 'community'
+  when: item.visiblility == 'community' | default(os_images_visibility == 'community')
 
 - name: Check if image suffix is provided
   set_fact:
