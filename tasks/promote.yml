@@ -7,11 +7,12 @@
     interface: "{{ os_images_interface | default(omit, true) }}"
   register: retire_or_promote_list
   when: >
-       (os_images_list | 
-        selectattr('rename_image', 'defined') |
-        selectattr('rename_image', 'equalto', true) |
-        list | length > 0)
-        or (os_images_promote | bool)
+    (
+      (os_images_list |
+      selectattr('rename_image', 'defined') |
+      list | length > 0)
+      or (os_images_promote | bool)
+    )
 
 - name: Ensure images for retirement exist
   assert:
@@ -33,13 +34,13 @@
 
 - name: Check if image suffix is provided
   set_fact:
-    image_suffix_provided: "{{ os_images_name_suffix is defined and os_images_name_suffix | length == 0 | bool }}"
+    image_suffix_provided: "{{ os_images_name_suffix is defined and os_images_name_suffix is not none and (os_images_name_suffix | length > 0) | bool }}"
 
-- debug: 
+- debug:
     msg: |
       Warning: no image suffix is provided so retired images are not renamed and candidate images are not promoted.
-      Images with the `hide_image` attribute will still be hidden. 
-  when: image_suffix_provided is False
+      Images with the `hide_image` attribute will still be hidden.
+  when: image_suffix_provided == false
 
 - name: Hide retire candidate images
   command: "{{ os_images_venv }}/bin/openstack image set --hidden {{ promotion_name }}"
@@ -75,9 +76,11 @@
       The following images have been promoted: 
       {% for item in images %}
       {{ item.name }} > {{ item.name[:-(os_images_name_suffix | length | int)] }}
+      {% endfor %}
   vars:
     images: "{{ os_images_list | list }}"
+  when: image_suffix_provided and (item.rename_image | default(os_images_promote) | bool)
 
 - debug:
     var: renaming_message
-  when: "image_suffix_provided and (item.rename_image | default(os_images_promote) | bool)"
+  when: image_suffix_provided and (item.rename_image | default(os_images_promote) | bool)
