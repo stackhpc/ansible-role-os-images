@@ -97,7 +97,17 @@ will be replaced with the newly built image if `os_images_upload` is set to `Tru
 
 `os_images_public`: Whether uploaded images are public. Defaults to `True` - note this requires admin permissions.
 
-`os_images_venv`: Path to virtualenv in which to install python dependencies.
+`os_images_venv`: Path to virtualenv in which to install python dependencies to upload images.
+
+`os_images_dib_venv`: Path to virtualenv in which to install DIB to build images.
+
+`os_images_promote`: Whether or not to retire old and promote new images. Defaults to `False`.
+
+`os_images_build`: Whether or not to build the images.
+
+`os_images_name_suffix`: Image suffix which would be removed during image promotion, for exmple: -rc, -dev, -test etc. Mandatory for promotion functionality. Empty by default.
+
+`os_images_hide`: Whether or not to hide the images in Glance list. Hiding images is available as an option in image retirement/promotion process. Defaults to `False`.
 
 Dependencies
 ------------
@@ -130,7 +140,7 @@ The following playbook generates a guest image and uploads it to OpenStack:
             image_url: https://ftp.icm.edu.pl/pub/Linux/dist/fedora-alt/atomic/stable/Fedora-Atomic-27-20180326.1/CloudImages/x86_64/images/Fedora-Atomic-27-20180326.1.x86_64.qcow2
             properties:
               os_distro: fedora-atomic
-            type: qcow
+            type: qcow2
 
 Author Information
 ------------------
