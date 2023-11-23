@@ -10,6 +10,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
   register: retire_list
   when: item.rename_image | default(os_images_promote) | bool
 
@@ -27,6 +28,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
   register: promote_list
   when: item.rename_image | default(os_images_promote) | bool
 

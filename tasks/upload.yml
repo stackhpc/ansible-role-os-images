@@ -5,6 +5,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
     name: "{{ item.name ~ '-kernel' }}"
     state: absent
   with_items: "{{ os_images_list | list }}"
@@ -20,6 +21,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
     name: "{{ item.name ~ '-kernel' }}"
     state: present
     is_public: "{{ item.is_public | default(os_images_public) | bool }}"
@@ -38,6 +40,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
     name: "{{ item.name ~ '-ramdisk' }}"
     state: absent
   with_items: "{{ os_images_list | list }}"
@@ -53,6 +56,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
     name: "{{ item.name ~ '-ramdisk' }}"
     state: present
     is_public: "{{ item.is_public | default(os_images_public) | bool }}"
@@ -71,6 +75,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
     name: "{{ item.name }}"
     state: absent
   with_items: "{{ os_images_list | list }}"
@@ -83,6 +88,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
+    region: "{{ os_images_region | default(omit) }}"
     name: "{{ item.0.name }}"
     state: present
     is_public: "{{ item.0.is_public | default(os_images_public) | bool }}"
