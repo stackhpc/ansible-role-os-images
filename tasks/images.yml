@@ -35,6 +35,8 @@
     state: absent
   when: item.force_rebuild | default(os_images_force_rebuild) | bool
   with_items: "{{ os_images_list | list }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags: clean
 
 - name: Generate per-image cache directories
@@ -44,6 +46,8 @@
     group: "{{ ansible_facts.user_gid }}"
     state: directory
   with_items: "{{ os_images_list | list }}"
+  loop_control:
+    label: "{{ item.name }}"
   become: True
 
 - block:
@@ -53,10 +57,14 @@
         dest: "{{ image_dest }}"
         checksum: "{{ item.checksum | default(omit) }}"
       with_items: "{{ os_images_list | list }}"
+      loop_control:
+        label: "{{ item.name }}"
     - name: Unpack the image if .xz format
       command: unxz --keep --force {{ image_dest }}
       when: image_is_xz
       with_items: "{{ os_images_list | list }}"
+      loop_control:
+        label: "{{ item.name }}"
   vars:
     image_dest: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.{{ item.type | default('qcow2') }}{{ '.xz' if image_is_xz else '' }}"
     image_is_xz: "{{ item.image_url.endswith('.xz') }}"
@@ -112,6 +120,8 @@
     creates: "{{ os_images_cache }}/{{ item.name }}/{{ item.name }}.d/dib-manifests"
   environment: "{{ os_image_dib_env_default | combine(item.env | default({})) }}"
   with_items: "{{ os_images_list | list }}"
+  loop_control:
+    label: "{{ item.name }}"
   failed_when: false
   register: result
   # The output of this command can be quite large, and is not very useful as
