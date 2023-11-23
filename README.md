@@ -40,6 +40,8 @@ example, a dict of the form:
 * `username`: OpenStack username.  Defaults to `OS_USERNAME`.
 * `password`: OpenStack password.  Defaults to `OS_PASSWORD`.
 
+`os_images_region`: Define a region to upload the images.  Default is None.
+
 `os_images_cacert` is an optional path to a CA certificate bundle.
 
 `os_images_interface` is the endpoint URL type to fetch from the service

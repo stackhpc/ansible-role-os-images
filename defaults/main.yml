@@ -73,6 +73,9 @@ os_images_auth:
 # public, admin, or internal.
 os_images_interface:
 
+# Default region for OpenStack endpoint.
+os_images_region:
+
 # Pin to a specific version of diskimage-builder if required
 os_images_dib_version:
 
