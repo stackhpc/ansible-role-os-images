@@ -88,7 +88,7 @@
     auth: "{{ os_images_auth }}"
     cacert: "{{ os_images_cacert | default(omit) }}"
     interface: "{{ os_images_interface | default(omit, true) }}"
-    region: "{{ os_images_region | default(omit) }}"
+    region_name: "{{ os_images_region | default(omit) }}"
     name: "{{ item.0.name }}"
     state: present
     is_public: "{{ item.0.is_public | default(os_images_public) | bool }}"
