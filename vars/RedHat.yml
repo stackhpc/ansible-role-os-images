@@ -2,6 +2,7 @@
 # List of package dependencies.
 os_images_package_dependencies:
   - dosfstools
+  - gdisk
   - kpartx
   - lvm2
   - qemu-img
