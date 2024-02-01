@@ -1,3 +1,9 @@
+# NOTE:
+
+This repository is no longer maintained - role has been moved to [Ansible
+collection](https://docs.ansible.com/ansible/latest/collections_guide/index.html)
+now ➡️ https://github.com/stackhpc/ansible-collection-openstack
+
 OpenStack Images
 ================
 
@@ -73,7 +79,7 @@ mutually exclusive where each contain:
 `os_images_common`: A set of elements to include in every image listed.
 Defaults to `cloud-init enable-serial-console stable-interface-names`.
 
-`os_images_dib_pkg_name`: Optionally customise the name parameter passed 
+`os_images_dib_pkg_name`: Optionally customise the name parameter passed
 to the ansible.builtin.pip module when installing diskimage-builder. This can
 be used to install diskimage-builder from version control.
 
